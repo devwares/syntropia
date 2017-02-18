@@ -1,43 +1,38 @@
 <?php
 /*
- * Plugin Name: WpLdp
- * Plugin URI: https://wpldp.wares.fr/
+ * Plugin Name: syntropia
+ * Plugin URI: https://gaia/
  * Description: This is a plugin which aims to emulate the default caracteristics of a Linked Data Platform compatible server
  * Version: 0.1
  * License: GPL2
  */
- 
-// TODO : repartir sur plusieurs fichiers ? => includes.php
-// TODO : crÃ©er fonction get_context();
 
 namespace syntropia;
  
 // If the file is accessed outside of index.php (ie. directly), we just deny the access
 defined('ABSPATH') or die("No script kiddies please!");
 
-require_once('includes.php');
+//require_once('includes.php');
 
-class wpldp
+class syntropia
 {
 
 	/* default constructor */
     public function __construct()
     {
 	
-		/* loads additionnal wpldp functions */
-		include_once plugin_dir_path( __FILE__ ).'/includes.php';
-		new wpldp_includes();
+		new syntropia_includes();
 		
 		/* calls a function to register routes at the Rest API initialisation */
-        add_action('rest_api_init', array($this, 'wpldp_register_routes')) ;
+        add_action('rest_api_init', array($this, 'syntropia_register_routes')) ;
         
-        /* calls a function to set special header when receiving OPTIONS request (wpldp_post_comments) */
-        add_filter('rest_post_dispatch', array($this, 'wpldp_ac_allow_headers'));
+        /* calls a function to set special header when receiving OPTIONS request (syntropia_post_comments) */
+        add_filter('rest_post_dispatch', array($this, 'syntropia_ac_allow_headers'));
         
     }
 
-	// sets special header for function wpldp_post_comments
-	public function wpldp_ac_allow_headers(\WP_REST_Response $result)
+	// sets special header for function syntropia_post_comments
+	public function syntropia_ac_allow_headers(\WP_REST_Response $result)
 	{
 		if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS')
 		{
@@ -56,40 +51,40 @@ class wpldp
 	 * "/ldp" is the first URL segment after core prefix. Must be unique to our plugin
 	 * "/custom" is the route to some function */
 	 
-	public function wpldp_register_routes()
+	public function syntropia_register_routes()
     {
 
-		wpldp_debug('wpldp_register_routes');
+		syntropia_debug('syntropia_register_routes');
 		
 		/* Registers a route for listing posts */
 		register_rest_route( 'ldp', '/posts/', array(
 		'methods' => 'GET',
-		'callback' => array($this, 'wpldp_list_posts') ));
+		'callback' => array($this, 'syntropia_list_posts') ));
 		
 		/* Registers a route for fonction post_details */
 		register_rest_route( 'ldp', '/posts/(?P<slug>[a-zA-Z0-9-]+)', array(
 		'methods' => 'GET',
-		'callback' => array($this, 'wpldp_detail_post') ));
+		'callback' => array($this, 'syntropia_detail_post') ));
 		
 		/* Registers a route for fonction */
 		register_rest_route( 'ldp', '/posts/(?P<slug>[a-zA-Z0-9-]+)/comments/', array(
 		'methods' => 'GET',
-		'callback' => array($this, 'wpldp_get_comments') ));
+		'callback' => array($this, 'syntropia_get_comments') ));
 		
 		/* Registers a route for fonction */
 		register_rest_route( 'ldp', '/posts/(?P<slug>[a-zA-Z0-9-]+)/comments/', array(
 		'methods' => 'POST',
-		'callback' => array($this, 'wpldp_post_comments') ));
+		'callback' => array($this, 'syntropia_post_comments') ));
 		
 		/* Registers a route for fonction */
 		register_rest_route( 'ldp', '/test/(?P<slug>[a-zA-Z0-9-]+)/comments/', array(
 		'methods' => 'POST',
-		'callback' => array($this, 'wpldp_test_comments') ));
+		'callback' => array($this, 'syntropia_test_comments') ));
 		
 		/* Registers a route for fonction */
 		//register_rest_route( 'ldp', '/tests/(?P<slug>[a-zA-Z0-9-]+)/comments/', array(
 		//'methods' => 'PUT',
-		//'callback' => array($this, 'wpldp_put_comments') ));
+		//'callback' => array($this, 'syntropia_put_comments') ));
 
 	}
 	
@@ -99,13 +94,13 @@ class wpldp
 	 * 	url : http://www.yoursite.com/wp-json/ldp/posts/
 	 */
 	 
-	public function wpldp_list_posts()
+	public function syntropia_list_posts()
 	{	 
 		
-		wpldp_debug('wpldp_list_posts');
+		syntropia_debug('syntropia_list_posts');
 		
 		// sets headers
-		wpldp_default_headers();
+		syntropia_default_headers();
 		
 		// lists all posts in array
 		$tabPosts = get_posts();
@@ -121,10 +116,10 @@ class wpldp
 		
 		// initializes the "context" in array
 		// see : http://json-ld.org/spec/latest/json-ld/#the-context
-		$context = wpldp_get_context();
+		$context = syntropia_get_context();
 		
 		// stores posts in array
-		$graph = wpldp_get_container_graph($posts);
+		$graph = syntropia_get_container_graph($posts);
 		
 		// formats response
 		$retour = array('@context' => $context, '@graph' => array($graph));
@@ -140,12 +135,12 @@ class wpldp
 	 * url : http://www.yoursite.com/wp-json/ldp/posts/some-post-slug/
 	 */
 
-	public function wpldp_detail_post($data)
+	public function syntropia_detail_post($data)
 	{
-		wpldp_debug('wpldp_detail_post');
+		syntropia_debug('syntropia_detail_post');
 		
 		// sets headers
-		wpldp_default_headers();
+		syntropia_default_headers();
 		
 		// gets slug from args
 		$slug = $data['slug'];
@@ -177,7 +172,7 @@ class wpldp
 	
 		// initializes the "context" in array
 		// see : http://json-ld.org/spec/latest/json-ld/#the-context
-		$context = wpldp_get_context();
+		$context = syntropia_get_context();
 		
 		// formats data
 		$retour = array('@context' => $context, '@graph' => array($filteredPost));
@@ -193,13 +188,13 @@ class wpldp
 	 * url : http://www.yoursite.com/wp-json/ldp/posts/some-post-slug/comments/
 	 */
 	 
-	public function wpldp_get_comments($data)
+	public function syntropia_get_comments($data)
 	{
 		
-		wpldp_debug('wpldp_get_comments');
+		syntropia_debug('syntropia_get_comments');
 		
 		// sets headers
-		wpldp_default_headers();
+		syntropia_default_headers();
 		
 		// gets slug from args
 		$slug = $data['slug'];
@@ -226,7 +221,7 @@ class wpldp
 		
 		// initializes the "context" in array
 		// see : http://json-ld.org/spec/latest/json-ld/#the-context
-		$context = wpldp_get_context();
+		$context = syntropia_get_context();
 			
 		$retour = array('@context' => $context, '@graph' => $filteredComments);
 		
@@ -244,10 +239,10 @@ class wpldp
 	// TODO : ajouter validation des donnÃ©es (isset ?)
 	// TODO : revoir la structure (if ? while ?)
 	
-	public function wpldp_orig_post_comments($data)
+	public function syntropia_orig_post_comments($data)
 	{
 
-		wpldp_debug('wpldp_post_comments');
+		syntropia_debug('syntropia_post_comments');
 
 		/*
 		 * parameters :
@@ -264,7 +259,7 @@ class wpldp
 		// gets post_id from slug contained in POST request
 		if (isset($data['rdfs:label']))
 		{
-			$comment_post_id = wpldp_get_postid_by_slug($data['rdfs:label']);
+			$comment_post_id = syntropia_get_postid_by_slug($data['rdfs:label']);
 		}
 		else {$missingData = true; echo 'error : missing slug';}
 		
@@ -339,7 +334,7 @@ class wpldp
 	 * url : http://www.yoursite.com/wp-json/ldp/posts/some-post-slug/comments/
 	 */
 	
-	public function wpldp_post_comments($data)
+	public function syntropia_post_comments($data)
 	{
 		
 		/*
@@ -354,7 +349,7 @@ class wpldp
 		$missingData = false;
 
 		// sets headers
-		wpldp_default_headers();
+		syntropia_default_headers();
 		header('Access-Control-Allow-Origin:*', true);
 		
 		// gets objects
@@ -366,10 +361,10 @@ class wpldp
 		$graph_0 = $graph[0];
 		
 		// gets post_id from slug
-		$comment_post_id = wpldp_get_postid_by_slug($graph_0->{'http://www.w3.org/2000/01/rdf-schema#label'});
+		$comment_post_id = syntropia_get_postid_by_slug($graph_0->{'http://www.w3.org/2000/01/rdf-schema#label'});
 		// probleme : le JS traduit 'rdfs:label' par son URI
 		// Ã©crire une fonction qui rÃ©cupÃ¨re les bons URI ? ou inclure ces derniers dans la prÃ©sente fonction ?
-		wpldp_debug('id article : ' . $comment_post_id);
+		syntropia_debug('id article : ' . $comment_post_id);
 
 		// gets poster id
 		// TODO : envisager une creation de user "Ã  la volÃ©e" selon sioc:user ou compte invitÃ©
@@ -381,12 +376,12 @@ class wpldp
 		$comment_author = $tabUser->display_name;
 		$comment_author_email = $tabUser->user_email;
 		$comment_author_url = $tabUser->user_url;
-		wpldp_debug('auteur : ' . $comment_author);
+		syntropia_debug('auteur : ' . $comment_author);
 		
 		// gets content of the comment
 		// TODO : ATTENTION Ã  la validation des donnÃ©es ici (balises!)
 		$comment_content = $graph_0->{'dcterms:text'};		
-		wpldp_debug('contenu : ' . $comment_content);
+		syntropia_debug('contenu : ' . $comment_content);
 		
 		// sets various properties
 		// TODO : a dÃ©finir
@@ -425,7 +420,7 @@ class wpldp
 
 	}
 	
-	public function wpldp_test_comments($data)
+	public function syntropia_test_comments($data)
 	{
 		
 		/*
@@ -440,7 +435,7 @@ class wpldp
 		$missingData = false;
 
 		// sets headers
-		wpldp_default_headers();
+		syntropia_default_headers();
 		header('Access-Control-Allow-Origin:*', true);
 		
 		// gets objects
@@ -449,7 +444,7 @@ class wpldp
 		$graph = $body->{'@graph'};
 		
 		// converts data from @graph to Wordpress
-		$comment = wpldp_map_comment($graph);
+		$comment = syntropia_map_comment($graph);
 		
 		// creates comment
 		// TODO: validation des donnÃ©es etc.
@@ -462,6 +457,6 @@ class wpldp
 	
 }
 
-new wpldp();
+new syntropia();
 
 ?>
