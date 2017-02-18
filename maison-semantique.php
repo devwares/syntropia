@@ -26,21 +26,8 @@ class syntropia
 		/* calls a function to register routes at the Rest API initialisation */
         add_action('rest_api_init', array($this, 'syntropia_register_routes')) ;
         
-        /* calls a function to set special header when receiving OPTIONS request (syntropia_post_comments) */
-        add_filter('rest_post_dispatch', array($this, 'syntropia_ac_allow_headers'));
-        
     }
 
-	// sets special header for function syntropia_post_comments
-	public function syntropia_ac_allow_headers(\WP_REST_Response $result)
-	{
-		if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS')
-		{
-			$result->header('Access-Control-Allow-Headers', 'Authorization, Content-Type', true);
-		}
-		return $result;
-	}
-	
 
 	/* Registers custom routes (comments for each route are listed above)
 	 * 
@@ -57,35 +44,25 @@ class syntropia
 		syntropia_debug('syntropia_register_routes');
 		
 		/* Registers a route for listing posts */
-		register_rest_route( 'ldp', '/posts/', array(
+		register_rest_route( 'syntropia', '/posts/', array(
 		'methods' => 'GET',
 		'callback' => array($this, 'syntropia_list_posts') ));
 		
 		/* Registers a route for fonction post_details */
-		register_rest_route( 'ldp', '/posts/(?P<slug>[a-zA-Z0-9-]+)', array(
+		register_rest_route( 'syntropia', '/posts/(?P<slug>[a-zA-Z0-9-]+)', array(
 		'methods' => 'GET',
 		'callback' => array($this, 'syntropia_detail_post') ));
-		
-		/* Registers a route for fonction */
-		register_rest_route( 'ldp', '/posts/(?P<slug>[a-zA-Z0-9-]+)/comments/', array(
-		'methods' => 'GET',
-		'callback' => array($this, 'syntropia_get_comments') ));
-		
-		/* Registers a route for fonction */
-		register_rest_route( 'ldp', '/posts/(?P<slug>[a-zA-Z0-9-]+)/comments/', array(
-		'methods' => 'POST',
-		'callback' => array($this, 'syntropia_post_comments') ));
-		
-		/* Registers a route for fonction */
-		register_rest_route( 'ldp', '/test/(?P<slug>[a-zA-Z0-9-]+)/comments/', array(
-		'methods' => 'POST',
-		'callback' => array($this, 'syntropia_test_comments') ));
-		
-		/* Registers a route for fonction */
-		//register_rest_route( 'ldp', '/tests/(?P<slug>[a-zA-Z0-9-]+)/comments/', array(
-		//'methods' => 'PUT',
-		//'callback' => array($this, 'syntropia_put_comments') ));
 
+		/* Registers a route for fonction gpio_get */
+		register_rest_route( 'syntropia', '/gpio/(?P<slug>[a-zA-Z0-9-]+)/', array(
+		'methods' => 'GET',
+		'callback' => array($this, 'syntropia_gpio_get') ));
+		
+		/* Registers a route for fonction gpio_post */
+		register_rest_route( 'ldp', '/gpio/(?P<slug>[a-zA-Z0-9-]+)/', array(
+		'methods' => 'POST',
+		'callback' => array($this, 'syntropia_gpio_post') ));
+		
 	}
 	
 	/*
@@ -182,151 +159,6 @@ class syntropia
 
 	}
 
-	/*
-	 * returns comment(s) for a given post
-	 * method : GET
-	 * url : http://www.yoursite.com/wp-json/ldp/posts/some-post-slug/comments/
-	 */
-	 
-	public function syntropia_get_comments($data)
-	{
-		
-		syntropia_debug('syntropia_get_comments');
-		
-		// sets headers
-		syntropia_default_headers();
-		
-		// gets slug from args
-		$slug = $data['slug'];
-		
-		// first initialises $filteredComments to null, in case there is no comments for specified article
-		$filteredComments[0] = array();
-				
-		$comments = get_comments('post_name='.$slug);
-
-		// keeps only useful properties, link them to rdf <properties>, stores them in array
-		$cpt = -1;
-		foreach($comments as $comment)
-		{
-			$cpt = $cpt + 1;
-			
-			$filteredComments[$cpt] = array(
-				'undefined:commentid' => $comment->comment_ID,
-				// TODO : choisir entre author et ID pour sioc:user
-				//'sioc:User' => $comment->comment_author,
-				'sioc:User' => $comment->user_id,
-				'dcterms:created' => $comment->comment_date,
-				'dcterms:text' => $comment -> comment_content);
-		}
-		
-		// initializes the "context" in array
-		// see : http://json-ld.org/spec/latest/json-ld/#the-context
-		$context = syntropia_get_context();
-			
-		$retour = array('@context' => $context, '@graph' => $filteredComments);
-		
-		// returns json-ld formatted post
-		return rest_ensure_response($retour);
-		
-	}
-	
-	/*
-	 * allows people to write comment for a given post
-	 * method : POST
-	 * url : http://www.yoursite.com/wp-json/ldp/posts/some-post-slug/comments/
-	 */
-
-	// TODO : ajouter validation des donnÃ©es (isset ?)
-	// TODO : revoir la structure (if ? while ?)
-	
-	public function syntropia_orig_post_comments($data)
-	{
-
-		syntropia_debug('syntropia_post_comments');
-
-		/*
-		 * parameters :
-		 * 
-		 * 'rdfs:label' (slug)
-		 * 'sioc:user' (author)
-		 * 'dcterms:text' (content)
-		 */
-		
-		// declarations
-		$retour = null;
-		$missingData = false;
-
-		// gets post_id from slug contained in POST request
-		if (isset($data['rdfs:label']))
-		{
-			$comment_post_id = syntropia_get_postid_by_slug($data['rdfs:label']);
-		}
-		else {$missingData = true; echo 'error : missing slug';}
-		
-		// gets poster id
-		// TODO : envisager une creation de user "Ã  la volÃ©e" selon sioc:user ou compte invitÃ©
-		$comment_user_id = 2;
-		$tabUser = get_user_by('id', $comment_user_id);
-		
-		// gets user infos from id
-		// TODO : envisager une creation de user "Ã  la volÃ©e" selon sioc:user ou compte invitÃ©
-		$comment_author = $tabUser->display_name;
-		$comment_author_email = $tabUser->user_email;
-		$comment_author_url = $tabUser->user_url;
-		
-		// gets content of the comment
-		// TODO : ATTENTION Ã  la validation des donnÃ©es ici (balises!)
-		if (isset($data['dcterms:text']))
-		{
-			$comment_content = $data['dcterms:text'];
-		}
-		else {$missingData = true; echo 'error : missing content';}
-
-		// sets various properties
-		// TODO : a dÃ©finir
-		$comment_type = '';
-		$comment_parent = 0;
-		
-		// gets poster IP and HTTP_USER_AGENT
-		$comment_author_IP = $_SERVER['REMOTE_ADDR'];
-		$comment_agent = $_SERVER['HTTP_USER_AGENT'];
-		
-		// gets current time
-		$time = current_time('mysql');
-
-		// formats comment data
-		$tabComment = array(
-		'comment_post_ID' => $comment_post_id,
-		'comment_author' => $comment_author,
-		'comment_author_email' => $comment_author_email,
-		'comment_author_url' => $comment_author_url,
-		'comment_content' => $comment_content,
-		'comment_type' => $comment_type,
-		'comment_parent' => $comment_parent,
-		'user_id' => $comment_user_id,
-		'comment_author_IP' => $comment_author_IP,
-		'comment_agent' => $comment_agent,
-		'comment_date' => $time,
-		'comment_approved' => 1,
-		);
-		
-		// final validation test(s)
-		if ($missingData)
-		
-		{
-			$retour = 'Missing data !';
-			return null;
-		}
-		
-		else
-		
-		{
-			// inserts comment if validation tests passed, then displays data for debugging purpose
-			wp_insert_comment($tabComment);
-			return $tabComment;
-		}
-	
-	}
 	
 	/*
 	 * allows people to write comment for a given post
@@ -334,7 +166,7 @@ class syntropia
 	 * url : http://www.yoursite.com/wp-json/ldp/posts/some-post-slug/comments/
 	 */
 	
-	public function syntropia_post_comments($data)
+	public function syntropia_gpio_post($data)
 	{
 		
 		/*
@@ -414,41 +246,6 @@ class syntropia
 		// creates comment
 		// TODO: validation des donnÃ©es etc.
 		wp_insert_comment($tabComment);
-	
-		// ALTERNATE ENDING : print_r($data->get_body()); exit(0);
-		return($data);
-
-	}
-	
-	public function syntropia_test_comments($data)
-	{
-		
-		/*
-		 * parameters :
-		 * 
-		 * 'rdfs:label' (slug)
-		 * 'sioc:user' (author)
-		 * 'dcterms:text' (content)
-		 */
-
-		// declarations
-		$missingData = false;
-
-		// sets headers
-		syntropia_default_headers();
-		header('Access-Control-Allow-Origin:*', true);
-		
-		// gets objects
-		$body = json_decode($data->get_body());
-		$context = $body->{'@context'};
-		$graph = $body->{'@graph'};
-		
-		// converts data from @graph to Wordpress
-		$comment = syntropia_map_comment($graph);
-		
-		// creates comment
-		// TODO: validation des donnÃ©es etc.
-		wp_insert_comment($comment);
 	
 		// ALTERNATE ENDING : print_r($data->get_body()); exit(0);
 		return($data);
