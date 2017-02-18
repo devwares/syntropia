@@ -12,16 +12,12 @@ namespace syntropia;
 // If the file is accessed outside of index.php (ie. directly), we just deny the access
 defined('ABSPATH') or die("No script kiddies please!");
 
-//require_once('includes.php');
-
 class syntropia
 {
 
 	/* default constructor */
     public function __construct()
     {
-	
-		new syntropia_includes();
 		
 		/* calls a function to register routes at the Rest API initialisation */
         add_action('rest_api_init', array($this, 'syntropia_register_routes')) ;
