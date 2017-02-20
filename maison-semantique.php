@@ -37,25 +37,27 @@ class syntropia
 	public function syntropia_register_routes()
     {
 
-		syntropia_debug('syntropia_register_routes');
-		
+		//command = 'echo `date` : \''. 'register_route' . '\'>> /tmp/syntropia_debug.log';
+		//exec($command);
+
 		/* Registers a route for listing posts */
 		register_rest_route( 'syntropia', '/posts/', array(
 		'methods' => 'GET',
 		'callback' => array($this, 'syntropia_list_posts') ));
 		
-		/* Registers a route for fonction post_details */
+		/* Registers a route for fonction detail_post*/
 		register_rest_route( 'syntropia', '/posts/(?P<slug>[a-zA-Z0-9-]+)', array(
 		'methods' => 'GET',
 		'callback' => array($this, 'syntropia_detail_post') ));
 
 		/* Registers a route for fonction gpio_get */
-		register_rest_route( 'syntropia', '/gpio/(?P<slug>[a-zA-Z0-9-]+)/', array(
+		register_rest_route( 'syntropia', '/gpio/(?P<gpio_number>[a-zA-Z0-9-]+)/(?P<gpio_state>[a-zA-Z0-9-]+)/', array(
 		'methods' => 'GET',
 		'callback' => array($this, 'syntropia_gpio_get') ));
 		
+		
 		/* Registers a route for fonction gpio_post */
-		register_rest_route( 'ldp', '/gpio/(?P<slug>[a-zA-Z0-9-]+)/', array(
+		register_rest_route( 'ldp', '/gpio/(?P<gpio_number>[a-zA-Z0-9-]+)/', array(
 		'methods' => 'POST',
 		'callback' => array($this, 'syntropia_gpio_post') ));
 		
@@ -70,35 +72,10 @@ class syntropia
 	public function syntropia_list_posts()
 	{	 
 		
-		syntropia_debug('syntropia_list_posts');
-		
-		// sets headers
-		syntropia_default_headers();
-		
-		// lists all posts in array
-		$tabPosts = get_posts();
-		
-		for ($cpt = 0; $cpt < count($tabPosts) ; $cpt++)
-			{
-				$posts[$cpt] = array(
-				'rdfs:label'=>$tabPosts[$cpt]-> post_name,
-				'dcterms:title'=>$tabPosts[$cpt]-> post_title,
-				'dcterms:created'=>$tabPosts[$cpt]-> post_date,
-				'sioc:User'=>$tabPosts[$cpt]-> post_author) ;
-			}
-		
-		// initializes the "context" in array
-		// see : http://json-ld.org/spec/latest/json-ld/#the-context
-		$context = syntropia_get_context();
-		
-		// stores posts in array
-		$graph = syntropia_get_container_graph($posts);
-		
-		// formats response
-		$retour = array('@context' => $context, '@graph' => array($graph));
-		
-		// checks response then returns
-		return rest_ensure_response($retour);
+		$command = 'gpio -g mode 22 out && gpio -g write 22 1';
+		//$command = 'echo `date` : \''. $text . '\'>> /tmp/syntropia_debug.log';
+		exec($command);
+		return 0;
 		
 	}
 
@@ -155,7 +132,24 @@ class syntropia
 
 	}
 
-	
+
+	public function syntropia_gpio_get($data)
+	{	 
+		
+		/* 	exec  Exécute un programme externe
+			string exec ( string $command [, array &$output [, int &$return_var ]] )
+			exec() exécute la commande command.		*/
+		
+		// $command = 'gpio -g mode ' . $data . ' out && gpio -g write ' . $data . ' 1' ;
+		$command = 'gpio -g mode ' . $data['gpio_number'] . ' out && gpio -g write ' . $data['gpio_number'] . ' ' . $data['gpio_state'] ;
+		exec($command, $sortie_script, $return_var);
+		
+		return $command;
+		
+		// 'Etat du GPIO ' . $data['gpio_number'] . ' : ' . $data['gpio_state'];
+		
+	}
+
 	/*
 	 * allows people to write comment for a given post
 	 * methods : POST, OPTIONS

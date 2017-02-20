@@ -1,0 +1,21 @@
+/*
+AfpaCréteil CDI
+DB 2015
+23_TP_JS_Dom_Style.css
+*/
+
+#idDivImage {
+    float:left;
+    width: 10px;
+    height: 10px;
+}
+#idDivPreuve {
+    width:10px;
+    float:right;
+    display:none;
+}
+
+/* img{
+    width: 540px;
+    height: 420px;
+} */
