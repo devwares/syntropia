@@ -21,10 +21,6 @@
  * 
  * 
  */
- 
- 
- // gpio -g read <number>
- 
 
 class Gpio
 {
@@ -36,26 +32,73 @@ class Gpio
 
 	public function __construct($name, $number, $state) // $name = string, $number = int, $state = boolean
 
-	{
-
-		$this->_nom=$name;
+	{		
+		
+		echo 'kiki toto';
+		
+		// note : ajouter des controles
+		$this->_name=$name;
 		$this->_number=$number;
 		$this->_state=$state;
-
+		
 		// incremente le nombre de gpios initialises
 		self::$_number_of_gpios = self::$_number_of_gpios + 1 ;
 		
+		/*******************************************************************************************
+		 * modifie l'etat du gpio via une commande shell
+		 *******************************************************************************************/ 
+		if ($state)
+		{
+			$state_parameter='1';
+		}
+		else
+		{
+			$state_parameter='0';
+		}
+		
+		$command = 'gpio -g mode ' . $number . ' out && gpio -g write ' . $number . ' ' . $state_parameter;
+		
+		exec($command, $sortie_script, $return_var);
+		
+		// exception en cas d'errorlevel different de 0
+		if ($return_var != 0)
+		{
+			throw new GpioException('GPIO access error : ' . $sortie_script);
+		}
+		
+		/*******************************************************************************************
+		 * si commande shell ok, affiche un message
+		 *******************************************************************************************/
+		echo 'GPIO ' .$this->_number . ' instancie sous le nom ' . $this->_name;
+		
 	}
 
-	public function set_state($state)
+	public function set_state($state) // attend un booleen
 
 	{
 		// initialise le booleen d'instance $_state
 		$this->_state=$state;
 		
+		// initialise le parametre a passer a la commande shell selon l'etat
+		if ($state)
+		{
+			$state_parameter='1';
+		}
+		else
+		{
+			$state_parameter='0';
+		}
+		
 		// execute la commande shell pour modifier l'etat du gpio
-		$command = 'gpio -g mode ' . $this->_number . ' out && gpio -g write ' . $data['gpio_number'] . ' ' . $data['gpio_state'] ;
-	exec($command, $sortie_script, $return_var);
+		
+		$command = 'gpio -g mode ' . $this->_number . ' out && gpio -g write ' . $this->_number . ' ' . $state_parameter ;
+		exec($command, $sortie_script, $return_var);
+		
+		// exception en cas d'errorlevel different de 0
+		if ($return_var != 0)
+		{
+			throw new GpioException('GPIO access error : ' . $sortie_script);
+		}
 		
 	}
 	
@@ -69,10 +112,27 @@ class Gpio
 		// 
 		if ($return_var != 0)
 		{
-			throw new Exception('GPIO access error');
+			throw new GpioException('GPIO access error : ' . $sortie_script);
 		}
 		
-		return($this->_state);
+		
+		// lit la sortie standard de la commande d'etat du GPIO
+		foreach($sortie_script as $ligne)
+		{
+			if ($ligne == '1')
+			{
+				$this->_state=true;
+				return true;
+			}
+			else if ($ligne == '0')
+			{
+				$this->_state=false;
+				return false;
+			}
+		}
+		
+		// si etat GPIO ni 0 ni 1, retourne -1
+		return -1;
 		
 	}
 	

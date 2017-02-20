@@ -42,13 +42,11 @@ require 'Gpio.php';
 
 <body>
 
-Allumage de la diode 17 : <?php
+Instantiation de la diode 17 : <?php
 
 try
 {
-	$gpio17 = new Gpio('diode_rouge', '17', true);
-	
-	
+	$gpio17 = new Gpio('diode_bleue', '17', false);	
 }
 catch (GpioException $e)
 {
@@ -56,6 +54,19 @@ catch (GpioException $e)
 }
 
 ?>
+
+
+	<form  action="gpio-form.php" method="post" enctype="multipart/form-data">
+
+		<input type="checkbox" name="gpio17" id="idcase1" /> <label for="idcase1">Led Bleue</label>
+		<input type="checkbox" name="gpio18" id="idcase2" /> <label for="idcase2">Led Verte</label>
+		<input type="checkbox" name="gpio22" id="idcase3" /> <label for="idcase3">Led Rouge</label>
+		
+		<br><br>
+		
+		<input type="submit" value="Modifier l'etat des GPIO" />
+
+    </form>
 
 
 </body>
