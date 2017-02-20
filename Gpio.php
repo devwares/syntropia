@@ -34,8 +34,6 @@ class Gpio
 
 	{		
 		
-		echo 'kiki toto';
-		
 		// note : ajouter des controles
 		$this->_name=$name;
 		$this->_number=$number;
@@ -65,11 +63,6 @@ class Gpio
 		{
 			throw new GpioException('GPIO access error : ' . $sortie_script);
 		}
-		
-		/*******************************************************************************************
-		 * si commande shell ok, affiche un message
-		 *******************************************************************************************/
-		echo 'GPIO ' .$this->_number . ' instancie sous le nom ' . $this->_name;
 		
 	}
 

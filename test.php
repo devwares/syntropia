@@ -27,8 +27,6 @@
 
 require 'Gpio.php';
 
-
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -42,25 +40,99 @@ require 'Gpio.php';
 
 <body>
 
-Instantiation de la diode 17 : <?php
+DEBUT DU CODE HTML<br></br>
 
-try
-{
-	$gpio17 = new Gpio('diode_bleue', '17', false);	
-}
-catch (GpioException $e)
-{
-	echo $e ;
-}
+<?php 
 
+/******************************************************************************
+ * SI REQUETE POST, FAIT UN SET SUR L'OBJET AVEC LE STATUT SELON PARAMETRES RECUS
+ * TODO : faire fonction qui prend le numero de gpio en parametre
+ * TODO : faire du javascript / ajax à la place
+ ******************************************************************************/
+if ($_POST['gpio_post_request']=='true')
+{
+	
+	if ($_POST['gpio17'] == 'on')
+	{
+		try
+		{
+			$gpio17 = new Gpio('diode_bleue', '17', true);
+		}
+		catch (GpioException $e)
+		{
+			echo $e ;
+		}
+	}
+	else
+	{
+		try
+		{
+			$gpio17 = new Gpio('diode_bleue', '17', false);
+		}
+		catch (GpioException $e)
+		{
+			echo $e ;
+		}
+	}
+
+	if ($_POST['gpio18'] == 'on')
+	{
+		try
+		{
+			$gpio18 = new Gpio('diode_bleue', '18', true);
+		}
+		catch (GpioException $e)
+		{
+			echo $e ;
+		}
+	}
+	else
+	{
+		try
+		{
+			$gpio18 = new Gpio('diode_bleue', '18', false);
+		}
+		catch (GpioException $e)
+		{
+			echo $e ;
+		}
+	}
+
+	if ($_POST['gpio22'] == 'on')
+	{
+		try
+		{
+			$gpio22 = new Gpio('diode_bleue', '22', true);
+		}
+		catch (GpioException $e)
+		{
+			echo $e ;
+		}
+	}
+	else
+	{
+		try
+		{
+			$gpio22 = new Gpio('diode_bleue', '22', false);
+		}
+		catch (GpioException $e)
+		{
+			echo $e ;
+		}
+	}
+	
+	
+}
+		
 ?>
 
 
-	<form  action="gpio-form.php" method="post" enctype="multipart/form-data">
+	<form  action="test.php" method="post" enctype="multipart/form-data">
 
 		<input type="checkbox" name="gpio17" id="idcase1" /> <label for="idcase1">Led Bleue</label>
 		<input type="checkbox" name="gpio18" id="idcase2" /> <label for="idcase2">Led Verte</label>
 		<input type="checkbox" name="gpio22" id="idcase3" /> <label for="idcase3">Led Rouge</label>
+		<input type="hidden" value="true" name="gpio_post_request" />
 		
 		<br><br>
 		
