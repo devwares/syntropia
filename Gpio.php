@@ -28,49 +28,29 @@ class Gpio
 	public static $_number_of_gpios = 0;
 	private $_name;
 	private $_number;
-	private $_state;
 
-	public function __construct($name, $number, $state) // $name = string, $number = int, $state = boolean
+	public function __construct($name, $number) // $name = string, $number = int
 
 	{		
 		
 		// note : ajouter des controles
 		$this->_name=$name;
 		$this->_number=$number;
-		$this->_state=$state;
 		
 		// incremente le nombre de gpios initialises
+		// TODO : limite le nombre d'objets possibles en fonction du modele de raspberry
 		self::$_number_of_gpios = self::$_number_of_gpios + 1 ;
-		
-		/*******************************************************************************************
-		 * modifie l'etat du gpio via une commande shell
-		 *******************************************************************************************/ 
-		if ($state)
-		{
-			$state_parameter='1';
-		}
-		else
-		{
-			$state_parameter='0';
-		}
-		
-		$command = 'gpio -g mode ' . $number . ' out && gpio -g write ' . $number . ' ' . $state_parameter;
-		
-		exec($command, $sortie_script, $return_var);
-		
-		// exception en cas d'errorlevel different de 0
-		if ($return_var != 0)
-		{
-			throw new GpioException('GPIO access error : ' . $sortie_script);
-		}
 		
 	}
 
+	public function __toString()
+	{
+		return 'name='.$this->_name.', number='.$this->_number.', state='.$this->get_state();
+	}
+	
 	public function set_state($state) // attend un booleen
 
 	{
-		// initialise le booleen d'instance $_state
-		$this->_state=$state;
 		
 		// initialise le parametre a passer a la commande shell selon l'etat
 		if ($state)
@@ -114,12 +94,10 @@ class Gpio
 		{
 			if ($ligne == '1')
 			{
-				$this->_state=true;
 				return true;
 			}
 			else if ($ligne == '0')
 			{
-				$this->_state=false;
 				return false;
 			}
 		}
