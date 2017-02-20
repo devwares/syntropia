@@ -25,6 +25,9 @@
 /*	$command = 'gpio -g mode ' . $data['gpio_number'] . ' out && gpio -g write ' . $data['gpio_number'] . ' ' . $data['gpio_state'] ;
 	exec($command, $sortie_script, $return_var); */
 
+require 'Gpio.php';
+
+
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -39,9 +42,18 @@
 
 <body>
 
-Etat de la diode 17 : <?php
-$command = 		
-		
+Allumage de la diode 17 : <?php
+
+try
+{
+	$gpio17 = new Gpio('diode_rouge', '17', true);
+	
+	
+}
+catch (GpioException $e)
+{
+	echo $e ;
+}
 
 ?>
 
