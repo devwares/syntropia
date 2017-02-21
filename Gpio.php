@@ -19,6 +19,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301, USA.
  * 
+ * TODO : Deleguer l'acces direct au GPIO a une classe modele "GpioAccess"
+ * TODO : limite le nombre d'objets possibles en fonction du modele de raspberry
  * 
  */
 
@@ -38,7 +40,6 @@ class Gpio
 		$this->_number=$number;
 		
 		// incremente le nombre de gpios initialises
-		// TODO : limite le nombre d'objets possibles en fonction du modele de raspberry
 		self::$_number_of_gpios = self::$_number_of_gpios + 1 ;
 		
 	}

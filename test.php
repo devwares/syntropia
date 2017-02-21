@@ -40,7 +40,7 @@ require 'Gpio.php';
 
 <body>
 
-DEBUT DU CODE HTML<br></br>
+CONTROLE DES GPIO<br></br>
 
 <?php 
 
@@ -55,7 +55,7 @@ $tab_gpio=init_gpios(54);
  * Si requete de type POST validee, fait un "set" sur les objets selon params
  * TODO : faire du javascript / ajax à la place
  ******************************************************************************/
-if ($_POST['gpio_post_request']=='true')
+if (isset($_POST['gpio_post_request']) and $_POST['gpio_post_request']=='true')
 {
 	
 	try 
