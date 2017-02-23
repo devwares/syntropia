@@ -48,7 +48,7 @@ CONTROLE DES GPIO<br></br>
  * Instancie systematiquement tous les gpios à utiliser
  ******************************************************************************/
 //$tab_gpio=array();
-$tab_gpio=init_gpios(54);
+$tab_gpio=init_gpios(26);
 
 
 /******************************************************************************
@@ -119,6 +119,19 @@ function mod_gpio(Gpio $gpio, $gpio_state)
 
 	<form  action="test.php" method="post" enctype="multipart/form-data">
 
+	<?php	
+	
+		$max=Gpio::getNumber();
+		for ($cpt=1; $cpt < $max; $cpt++)
+
+		{
+			echo '<input type="checkbox" name="gpio'. $cpt . '" id="idcase' . $cpt . '" ';
+			if ($tab_gpio[$cpt]->get_state()) echo ' checked';
+			echo ' /> <label for="idcase' . $cpt . '">GPIO ' . $cpt . '</label><br>';
+		}
+		
+	?>
+	
 		<input type="checkbox" name="gpio17" id="idcase1" <?php if ($tab_gpio[17]->get_state()) echo ' checked';?> /> <label for="idcase1">Led Bleue</label>
 		<input type="checkbox" name="gpio18" id="idcase2" <?php if ($tab_gpio[18]->get_state()) echo ' checked';?> /> <label for="idcase2">Led Verte</label>
 		<input type="checkbox" name="gpio22" id="idcase3" <?php if ($tab_gpio[22]->get_state()) echo ' checked';?> /> <label for="idcase3">Led Rouge</label>

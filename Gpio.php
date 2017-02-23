@@ -27,7 +27,7 @@
 class Gpio
 {
 
-	public static $_number_of_gpios = 0;
+	private static $_number_of_gpios = 0;
 	private $_name;
 	private $_number;
 
@@ -106,6 +106,12 @@ class Gpio
 		// si etat GPIO ni 0 ni 1, retourne -1
 		return -1;
 		
+	}
+	
+	public static function getNumber()
+	
+	{
+		return self::$_number_of_gpios;
 	}
 	
 }
