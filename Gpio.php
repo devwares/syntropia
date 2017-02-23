@@ -46,10 +46,10 @@ class Gpio
 
 	public function __toString()
 	{
-		return 'name='.$this->_name.', number='.$this->_number.', state='.$this->get_state();
+		return 'name='.$this->_name.', number='.$this->_number.', state='.$this->getState();
 	}
 	
-	public function set_state($state) // attend un booleen
+	public function setState($state) // attend un booleen
 
 	{
 		
@@ -76,7 +76,7 @@ class Gpio
 		
 	}
 	
-	public function get_state()
+	public function getState()
 	
 	{
 		// recupere l'etat physique du gpio via une commande shell, plutot que de se fier à l'etat de l'objet

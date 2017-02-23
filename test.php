@@ -110,7 +110,7 @@ function mod_gpio(Gpio $gpio, $gpio_state)
 	
 	try
 	{
-		$gpio->set_state($gpio_state);
+		$gpio->setState($gpio_state);
 	}
 	catch (GpioException $e)
 	{
@@ -118,7 +118,6 @@ function mod_gpio(Gpio $gpio, $gpio_state)
 	}
 	
 }
-
 
 ?>
 
@@ -133,11 +132,9 @@ function mod_gpio(Gpio $gpio, $gpio_state)
 
 		{
 			echo '<input type="checkbox" name="gpio'. $cpt . '" id="idcase' . $cpt . '" ';
-			if ($tab_gpio[$cpt]->get_state()) echo ' checked';
+			if ($tab_gpio[$cpt]->getState()) echo ' checked';
 			echo ' /> <label for="idcase' . $cpt . '">GPIO ' . $cpt . '</label><br>';
 		}
-		
-
 		
 	?>
 	
@@ -149,7 +146,6 @@ function mod_gpio(Gpio $gpio, $gpio_state)
 		<input type="submit" value="Modifier l'etat des GPIO" />
 
     </form>
-
 
 </body>
 
