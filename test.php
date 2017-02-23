@@ -47,7 +47,6 @@ CONTROLE DES GPIO<br></br>
 /******************************************************************************
  * Instancie systematiquement tous les gpios à utiliser
  ******************************************************************************/
-//$tab_gpio=array();
 $tab_gpio=init_gpios(26);
 
 
@@ -60,9 +59,15 @@ if (isset($_POST['gpio_post_request']) and $_POST['gpio_post_request']=='true')
 	
 	try 
 	{
-		if (isset($_POST['gpio17']) AND $_POST['gpio17'] == 'on') mod_gpio($tab_gpio[17], true); else mod_gpio($tab_gpio[17], false);
-		if (isset($_POST['gpio18']) AND $_POST['gpio18'] == 'on') mod_gpio($tab_gpio[18], true); else mod_gpio($tab_gpio[18], false);
-		if (isset($_POST['gpio22']) AND $_POST['gpio22'] == 'on') mod_gpio($tab_gpio[22], true); else mod_gpio($tab_gpio[22], false);
+		
+		// boucle sur chaque gpio instancie, et change son etat si la requete POST l'exige
+		$max=Gpio::getNumber();
+		for ($cpt=1; $cpt < $max; $cpt++)
+
+		{
+			if (isset($_POST['gpio'. $cpt]) AND $_POST['gpio' .$cpt] == 'on') mod_gpio($tab_gpio[$cpt], true); else mod_gpio($tab_gpio[$cpt], false);
+		}
+
 	}
 	catch (GpioException $e)
 	{
@@ -121,6 +126,8 @@ function mod_gpio(Gpio $gpio, $gpio_state)
 
 	<?php	
 	
+		// boucle sur tous les gpio instancies, et cree un label et une checkbox pour chaque
+		// coche la case si le resultat du getState est positif
 		$max=Gpio::getNumber();
 		for ($cpt=1; $cpt < $max; $cpt++)
 
@@ -130,13 +137,13 @@ function mod_gpio(Gpio $gpio, $gpio_state)
 			echo ' /> <label for="idcase' . $cpt . '">GPIO ' . $cpt . '</label><br>';
 		}
 		
+
+		
 	?>
 	
-		<input type="checkbox" name="gpio17" id="idcase1" <?php if ($tab_gpio[17]->get_state()) echo ' checked';?> /> <label for="idcase1">Led Bleue</label>
-		<input type="checkbox" name="gpio18" id="idcase2" <?php if ($tab_gpio[18]->get_state()) echo ' checked';?> /> <label for="idcase2">Led Verte</label>
-		<input type="checkbox" name="gpio22" id="idcase3" <?php if ($tab_gpio[22]->get_state()) echo ' checked';?> /> <label for="idcase3">Led Rouge</label>
+		<!-- input cache pour savoir si un post a ete effectue depuis ce fichier -->
 		<input type="hidden" value="true" name="gpio_post_request" />
-
+		
 		<br><br>
 		
 		<input type="submit" value="Modifier l'etat des GPIO" />
