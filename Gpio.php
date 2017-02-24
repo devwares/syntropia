@@ -64,7 +64,18 @@ class Gpio
 
 	public function __toString()
 	{
-		return 'name='.$this->_name.', pin number='.$this->_pin.', state='.$this->getState();
+		// $retour='name='.$this->_name.', pin number='.$this->_pin.', state='.$this->getState();
+		
+		try
+		{
+			$retour='name='.$this->_name.', pin number='.$this->_pin.', state='.$this->_gpioaccess->getValue();
+		}
+		catch (GpioException $e)
+		{
+			throw new GpioException('ne peut obtenir le value');
+		}
+		
+		return $retour;
 	}
 	
 	public function setState($state) // attend un booleen
@@ -74,23 +85,29 @@ class Gpio
 		// initialise le parametre a passer a la commande shell selon l'etat
 		if ($state)
 		{
-			$state_parameter='1';
+			//$state_parameter='1';
+			$this->$_gpio_access->Out();
+			$this->$_gpio_access->High();
 		}
 		else
 		{
-			$state_parameter='0';
+			//$state_parameter='0';
+			$this->$_gpio_access->Out();
+			$this->$_gpio_access->Low();
 		}
 		
 		// execute la commande shell pour modifier l'etat du gpio
 		
-		$command = 'gpio -g mode ' . $this->_pin . ' out && gpio -g write ' . $this->_pin . ' ' . $state_parameter ;
-		exec($command, $sortie_script, $return_var);
+		//$command = 'gpio -g mode ' . $this->_pin . ' out && gpio -g write ' . $this->_pin . ' ' . $state_parameter ;
+		//exec($command, $sortie_script, $return_var);
+		
+
 		
 		
 		// exception en cas d'errorlevel different de 0
 		if ($return_var != 0)
 		{
-			throw new GpioException('Probleme acces GPIO');
+			throw new GpioException('erreur script code retour' . $return_var);
 		}
 		
 	}
@@ -105,7 +122,7 @@ class Gpio
 		// 
 		if ($return_var != 0)
 		{
-			throw new GpioException('Probleme acces GPIO');
+			throw new GpioException('erreur script code retour' . $return_var);
 		}
 		
 		

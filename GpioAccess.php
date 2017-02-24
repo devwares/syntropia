@@ -15,7 +15,7 @@ class GpioAccess
 		// note : ajouter des controles
 		$this->_pin=$pin;
 		
-		// ajouter un controle pour voir si shell repond et gpio repond
+		// ajouter un controle pour voir si shell et gpio repondent
 	
 	}
 
@@ -23,12 +23,14 @@ class GpioAccess
 	
 	{
 		// commande shell pour mettre mode out
+		echo 'gpio -g mode <pin> out';
 	}
 	
 	public function In()
 	
 	{
 		// commande shell pour mettre mode in
+		echo 'gpio -g mode <pin> in';
 	}
 	
 	
@@ -36,23 +38,19 @@ class GpioAccess
 	
 	{
 		// commande shell pour mettre value high
+		echo 'gpio -g write <pin> 1';
 	}
-	
 	
 	public function Low()
 	
 	{
 		// commande shell pour mettre value low
-	}
-	
-	public function getMode()
-	{
-		
+		echo 'gpio -g write <pin> 0';
 	}
 	
 	public function getValue()
 	{
-		
+		echo 'gpio -g read <pin>';
 	}
 	
 }

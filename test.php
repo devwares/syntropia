@@ -126,6 +126,18 @@ function mod_gpio(Gpio $gpio, $gpio_state)
 	
 }
 
+
+/******************************************************************************
+ * genere une alerte javascript
+ ******************************************************************************/
+function alerte($message)
+{
+	$sortie = '<script type="text/javascript" language="javascript">alert("'. $message . '");</script>';
+	echo $sortie;
+	return 0;
+}
+
+
 ?>
 
 	<form  action="test.php" method="post" enctype="multipart/form-data">
