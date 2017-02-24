@@ -25,27 +25,16 @@
  */
 
 class GpioException extends Exception
-
 {
-
 	public function __construct($message, $code = 0)
-
 	{
-
 		parent::__construct($message, $code);
-
 	}
-
-
 
 	public function __toString()
-
 	{
-
 		return $this->message;
-
 	}
-
 }
 
 class Gpio
@@ -53,15 +42,18 @@ class Gpio
 
 	private static $_number_of_gpios = 0;
 	private $_name;
-	private $_number;
+	private $_pin;
 
-	public function __construct($name, $number) // $name = string, $number = int
+	public function __construct($name, $pin) // $name = string, $pin = int
 
 	{		
 		
 		// note : ajouter des controles
 		$this->_name=$name;
-		$this->_number=$number;
+		$this->_pin=$pin;
+		
+		// instancie un GpioAccess
+		$this->_gpioaccess=new GpioAccess($pin);
 		
 		// incremente le nombre de gpios initialises
 		self::$_number_of_gpios = self::$_number_of_gpios + 1 ;
@@ -70,7 +62,7 @@ class Gpio
 
 	public function __toString()
 	{
-		return 'name='.$this->_name.', number='.$this->_number.', state='.$this->getState();
+		return 'name='.$this->_name.', number='.$this->_pin.', state='.$this->getState();
 	}
 	
 	public function setState($state) // attend un booleen
@@ -89,7 +81,7 @@ class Gpio
 		
 		// execute la commande shell pour modifier l'etat du gpio
 		
-		$command = 'gpio -g mode ' . $this->_number . ' out && gpio -g write ' . $this->_number . ' ' . $state_parameter ;
+		$command = 'gpio -g mode ' . $this->_pin . ' out && gpio -g write ' . $this->_pin . ' ' . $state_parameter ;
 		exec($command, $sortie_script, $return_var);
 		
 		
@@ -105,7 +97,7 @@ class Gpio
 	
 	{
 		// recupere l'etat physique du gpio via une commande shell, plutot que de se fier à l'etat de l'objet
-		$command = 'gpio -g read ' . $this->_number;
+		$command = 'gpio -g read ' . $this->_pin;
 		exec($command, $sortie_script, $return_var);
 
 		// 
