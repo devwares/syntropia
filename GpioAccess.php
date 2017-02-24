@@ -1,5 +1,7 @@
 <?php
 
+// TODO : ajouter gestion exception dans chaque fonction
+
 namespace Syntropia;
 
 class GpioAccess

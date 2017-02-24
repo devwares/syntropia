@@ -83,32 +83,38 @@ class Gpio
 	{
 		
 		// initialise le parametre a passer a la commande shell selon l'etat
-		if ($state)
-		{
-			//$state_parameter='1';
-			$this->$_gpio_access->Out();
-			$this->$_gpio_access->High();
-		}
-		else
-		{
-			//$state_parameter='0';
-			$this->$_gpio_access->Out();
-			$this->$_gpio_access->Low();
-		}
 		
+		try
+		{
+			
+			if ($state)
+			{
+				//$state_parameter='1';
+				$this->_gpioaccess->Out();
+				$this->_gpioaccess->High();
+			}
+			else
+			{
+				//$state_parameter='0';
+				$this->_gpioaccess->Out();
+				$this->_gpioaccess->Low();
+			}
+		
+		}
+		catch (GpioException $e)
+		{
+			throw new GpioException('impossible de changer l\'etat du gpio');
+		}
 		// execute la commande shell pour modifier l'etat du gpio
 		
 		//$command = 'gpio -g mode ' . $this->_pin . ' out && gpio -g write ' . $this->_pin . ' ' . $state_parameter ;
 		//exec($command, $sortie_script, $return_var);
 		
-
-		
-		
 		// exception en cas d'errorlevel different de 0
-		if ($return_var != 0)
+		/* if ($return_var != 0)
 		{
 			throw new GpioException('erreur script code retour' . $return_var);
-		}
+		} */
 		
 	}
 	

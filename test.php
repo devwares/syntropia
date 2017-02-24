@@ -176,6 +176,9 @@ function alerte($message)
 
     </form>
 
+<?php alerte('coucou toto');?>
+
+
 </body>
 
 </html>
