@@ -128,8 +128,6 @@ function mod_gpio(Gpio $gpio, $gpio_state)
 
 ?>
 
-echo 'tota';
-
 	<form  action="test.php" method="post" enctype="multipart/form-data">
 
 	<?php	
@@ -148,21 +146,20 @@ echo 'tota';
 			}
 			catch (GpioException $e)
 			{
-				echo 'fonction main (formulaire) : ';
-				echo $e;
-				die();
+				// si probleme d'acces au gpio, la case est desactivee
+				echo 'disabled=true';
 			}
 			
-			echo ' /> <label for="idcase' . $cpt . '">GPIO ' . $cpt . '</label><br>';
+			echo ' /> <label for="idcase' . $cpt . '">GPIO ' . $cpt . '</label>';
+			echo ' => ' . $tab_gpio[$cpt];
+			echo '<br>';
 		}
 		
 	?>
 	
 		<!-- input cache pour savoir si un post a ete effectue depuis ce fichier -->
 		<input type="hidden" value="true" name="gpio_post_request" />
-		
-		<br><br>
-		
+		<br>
 		<input type="submit" value="Modifier l'etat des GPIO" />
 
     </form>

@@ -64,7 +64,7 @@ class Gpio
 
 	public function __toString()
 	{
-		return 'name='.$this->_name.', number='.$this->_pin.', state='.$this->getState();
+		return 'name='.$this->_name.', pin number='.$this->_pin.', state='.$this->getState();
 	}
 	
 	public function setState($state) // attend un booleen
