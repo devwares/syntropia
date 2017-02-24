@@ -19,7 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301, USA.
  * 
- * TODO : Deleguer l'acces direct au GPIO a une classe modele "GpioAccess"
  * TODO : limite le nombre d'objets possibles en fonction du modele de raspberry
  * 
  */
@@ -35,8 +34,12 @@ class Gpio
 	private $_name;
 	private $_pin;
 
+	
+	/******************************************************************************
+	 * Constructeur : attend une chaine et un numero de pin pour le gpio
+	 ******************************************************************************/
 	public function __construct($name, $pin) // $name = string, $pin = int
-
+	
 	{		
 		
 		// note : ajouter des controles
@@ -51,6 +54,9 @@ class Gpio
 		
 	}
 
+	/******************************************************************************
+	 * toString : utilise pour afficher l'etat de l'objet
+	 ******************************************************************************/
 	public function __toString()
 	{
 		// $retour='name='.$this->_name.', pin number='.$this->_pin.', state='.$this->getState();
@@ -71,72 +77,57 @@ class Gpio
 		return $retour;
 	}
 	
+	
+	/******************************************************************************
+	 * Modifie l'etat d'un gpio (true ou false = 1 ou 0)
+	 ******************************************************************************/
 	public function setState($state) // attend un booleen
 
 	{
 		
-		// initialise le parametre a passer a la commande shell selon l'etat
-		
 		try
 		{
-			
-			if ($state)
-			{
-				//$state_parameter='1';
-				$this->_gpioaccess->Out();
-				$this->_gpioaccess->High();
-			}
-			else
-			{
-				//$state_parameter='0';
-				$this->_gpioaccess->Out();
-				$this->_gpioaccess->Low();
-			}
-		
+			$this->_gpioaccess->Out();
+			// initialise le parametre a passer a la commande shell selon l'etat
+			if ($state) {$this->_gpioaccess->High();} else {$this->_gpioaccess->Low();}
 		}
+		
 		catch (\GpioException $e)
 		{
-			throw new \GpioException('impossible de changer l\'etat du gpio => ' . $e);
+			throw new \GpioException('Classe Gpio => setState => probleme gpio => ' . $e);
 		}
+		
 		catch (\ShellException $e)
 		{
-			throw new \ShellException('probleme shell => ' . $e);
+			throw new \ShellException('Classe Gpio => setState => probleme shell => ' . $e);
 		}
 		
 	}
 	
+	/******************************************************************************
+	 * Renvoie l'etat de la "value" du gpio : true pour 1, false pour 0
+	 ******************************************************************************/
 	public function getState()
 	
 	{
-		// recupere l'etat physique du gpio via une commande shell, plutot que de se fier à l'etat de l'objet
-		$command = 'gpio -g read ' . $this->_pin;
-		exec($command, $sortie_script, $return_var);
-
-		// 
-		if ($return_var != 0)
+		
+		try
 		{
-			throw new \GpioException('erreur script code retour' . $return_var);
+			$valeurGpio = $this->_gpioaccess->getValue()=='1';
+			// si gpio valeur = 1, retourne true, si valeur = 0 retourne false, sinon -1
+			if ($valeurGpio == 1) return true; else if ($valeurGpio=='0') return false;
+			else throw new \GpioException('Classe Gpio => getState => probleme valeur gpio => ' . $e);
 		}
-		
-		
-		// lit la sortie standard de la commande d'etat du GPIO
-		foreach($sortie_script as $ligne)
+		catch (\ShellException $e)
 		{
-			if ($ligne == '1')
-			{
-				return true;
-			}
-			else if ($ligne == '0')
-			{
-				return false;
-			}
+			throw new \ShellException('Classe Gpio => getState => probleme shell => ' . $e);
 		}
-		
-		// si etat GPIO ni 0 ni 1, retourne -1
-		return -1;
 		
 	}
 	
+	/******************************************************************************
+	 * Renvoie le nombre total d'objets instancies
+	 ******************************************************************************/
 	public static function getNumber()
 	
 	{

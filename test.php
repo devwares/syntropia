@@ -156,9 +156,14 @@ function alerte($message)
 			{
 				if ($tab_gpio[$cpt]->getState()) echo ' checked';
 			}
-			catch (GpioException $e)
+			catch (\GpioException $e)
 			{
 				// si probleme d'acces au gpio, la case est desactivee
+				echo 'disabled=true';
+			}
+			catch (\ShellException $e)
+			{
+				// si probleme d'execution du programme shell, la case est desactivee
 				echo 'disabled=true';
 			}
 			
