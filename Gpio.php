@@ -24,6 +24,30 @@
  * 
  */
 
+class GpioException extends Exception
+
+{
+
+	public function __construct($message, $code = 0)
+
+	{
+
+		parent::__construct($message, $code);
+
+	}
+
+
+
+	public function __toString()
+
+	{
+
+		return $this->message;
+
+	}
+
+}
+
 class Gpio
 {
 
@@ -83,11 +107,11 @@ class Gpio
 		// recupere l'etat physique du gpio via une commande shell, plutot que de se fier à l'etat de l'objet
 		$command = 'gpio -g read ' . $this->_number;
 		exec($command, $sortie_script, $return_var);
-		
+
 		// 
 		if ($return_var != 0)
 		{
-			throw new GpioException('Probleme d\'acces au gpio', 2);
+			throw new GpioException('Probleme acces GPIO');
 		}
 		
 		
@@ -117,29 +141,7 @@ class Gpio
 	
 }
 
-class GpioException extends Exception
 
-{
-
-	public function __construct($message, $code = 0)
-
-	{
-
-		parent::__construct($message, $code);
-
-	}
-
-
-
-	public function __toString()
-
-	{
-
-		return $this->message;
-
-	}
-
-}
 
 
 ?>

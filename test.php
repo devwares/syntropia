@@ -126,13 +126,22 @@ function mod_gpio(Gpio $gpio, $gpio_state)
 	<?php	
 	
 		// boucle sur tous les gpio instancies, et cree un label et une checkbox pour chaque
-		// coche la case si le resultat du getState est positif
 		$max=Gpio::getNumber();
 		for ($cpt=1; $cpt < $max; $cpt++)
 
 		{
 			echo '<input type="checkbox" name="gpio'. $cpt . '" id="idcase' . $cpt . '" ';
-			if ($tab_gpio[$cpt]->getState()) echo ' checked';
+			
+			// verifie l'etat du gpio, coche la case si le resultat du getState est positif
+			try
+			{
+				if ($tab_gpio[$cpt]->getState()) echo ' checked';
+			}
+			catch (GpioException $e)
+			{
+				echo 'aaaaaah' . $e;
+			}
+			
 			echo ' /> <label for="idcase' . $cpt . '">GPIO ' . $cpt . '</label><br>';
 		}
 		
