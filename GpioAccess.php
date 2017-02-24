@@ -1,5 +1,7 @@
 <?php
 
+namespace Syntropia;
+
 class GpioAccess
 
 {
@@ -52,9 +54,6 @@ class GpioAccess
 	{
 		
 	}
-	
-	
-	
 	
 }
 

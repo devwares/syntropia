@@ -25,6 +25,8 @@
 /*	$command = 'gpio -g mode ' . $data['gpio_number'] . ' out && gpio -g write ' . $data['gpio_number'] . ' ' . $data['gpio_state'] ;
 	exec($command, $sortie_script, $return_var); */
 
+namespace Syntropia;
+
 require 'Gpio.php';
 
 ?>
@@ -49,7 +51,6 @@ CONTROLE DES GPIO<br></br>
  ******************************************************************************/
 $tab_gpio=init_gpios(26);
 
-
 /******************************************************************************
  * Si requete de type POST validee, fait un "set" sur les objets selon params
  * TODO : faire du javascript / ajax à la place
@@ -71,7 +72,9 @@ if (isset($_POST['gpio_post_request']) and $_POST['gpio_post_request']=='true')
 	}
 	catch (GpioException $e)
 	{
+		echo 'fonction main : ';
 		echo $e;
+		die();
 	}
 	
 }
@@ -92,7 +95,9 @@ function init_gpios($max_gpio)
 		}
 		catch (GpioException $e)
 		{
+			echo 'fonction init_gpios : ';
 			echo $e ;
+			die();
 		}
 
 	}
@@ -114,12 +119,16 @@ function mod_gpio(Gpio $gpio, $gpio_state)
 	}
 	catch (GpioException $e)
 	{
+		echo 'fonction mod_gpio : ';
 		echo $e ;
+		die();
 	}
 	
 }
 
 ?>
+
+echo 'tota';
 
 	<form  action="test.php" method="post" enctype="multipart/form-data">
 
@@ -139,7 +148,9 @@ function mod_gpio(Gpio $gpio, $gpio_state)
 			}
 			catch (GpioException $e)
 			{
-				echo 'aaaaaah' . $e;
+				echo 'fonction main (formulaire) : ';
+				echo $e;
+				die();
 			}
 			
 			echo ' /> <label for="idcase' . $cpt . '">GPIO ' . $cpt . '</label><br>';

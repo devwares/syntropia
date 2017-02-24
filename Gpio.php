@@ -23,8 +23,10 @@
  * TODO : limite le nombre d'objets possibles en fonction du modele de raspberry
  * 
  */
+namespace Syntropia;
+require 'GpioAccess.php';
 
-class GpioException extends Exception
+class GpioException extends \Exception
 {
 	public function __construct($message, $code = 0)
 	{
