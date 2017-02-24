@@ -68,10 +68,11 @@ class Gpio
 		$command = 'gpio -g mode ' . $this->_number . ' out && gpio -g write ' . $this->_number . ' ' . $state_parameter ;
 		exec($command, $sortie_script, $return_var);
 		
+		
 		// exception en cas d'errorlevel different de 0
 		if ($return_var != 0)
 		{
-			throw new GpioException('GPIO access error : ' . $sortie_script);
+			throw new GpioException('Probleme acces GPIO');
 		}
 		
 	}
@@ -86,7 +87,7 @@ class Gpio
 		// 
 		if ($return_var != 0)
 		{
-			throw new GpioException('GPIO access error : ' . $sortie_script);
+			throw new GpioException('Probleme d\'acces au gpio', 2);
 		}
 		
 		
@@ -115,5 +116,30 @@ class Gpio
 	}
 	
 }
+
+class GpioException extends Exception
+
+{
+
+	public function __construct($message, $code = 0)
+
+	{
+
+		parent::__construct($message, $code);
+
+	}
+
+
+
+	public function __toString()
+
+	{
+
+		return $this->message;
+
+	}
+
+}
+
 
 ?>
