@@ -27,7 +27,10 @@
 
 namespace Syntropia;
 
-require 'Gpio.php';
+include_once 'Gpio.php';
+include_once 'GpioAccess.php';
+include_once 'GpioException.php';
+include_once 'ShellException.php';
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -82,24 +85,14 @@ if (isset($_POST['gpio_post_request']) and $_POST['gpio_post_request']=='true')
 
 /******************************************************************************
  * Instancie les gpio
+ * Retourne un array qui contient la liste des gpio
  ******************************************************************************/
 function init_gpios($max_gpio)
 {
 
 	for ($cpt_gpio=0; $cpt_gpio<$max_gpio ; $cpt_gpio++)
 	{
-
-		try
-		{
 			$tab_gpio[$cpt_gpio] = new Gpio('gpio_' . $cpt_gpio, $cpt_gpio);
-		}
-		catch (GpioException $e)
-		{
-			echo 'fonction init_gpios : ';
-			echo $e ;
-			die();
-		}
-
 	}
 	
 	return $tab_gpio;
@@ -117,10 +110,17 @@ function mod_gpio(Gpio $gpio, $gpio_state)
 	{
 		$gpio->setState($gpio_state);
 	}
-	catch (GpioException $e)
+	catch (\GpioException $e)
 	{
 		echo 'fonction mod_gpio : ';
 		echo $e ;
+		die();
+	}
+	catch (\ShellException $e)
+	{
+		echo 'fonction mod_gpio : ';
+		echo $e ;
+		echo '<br>' . $gpio;;
 		die();
 	}
 	
@@ -128,7 +128,7 @@ function mod_gpio(Gpio $gpio, $gpio_state)
 
 
 /******************************************************************************
- * genere une alerte javascript
+ * genere une alerte javascript (fonction de debuggage)
  ******************************************************************************/
 function alerte($message)
 {
@@ -175,9 +175,6 @@ function alerte($message)
 		<input type="submit" value="Modifier l'etat des GPIO" />
 
     </form>
-
-<?php alerte('coucou toto');?>
-
 
 </body>
 

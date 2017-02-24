@@ -24,20 +24,9 @@
  * 
  */
 namespace Syntropia;
-require 'GpioAccess.php';
-
-class GpioException extends \Exception
-{
-	public function __construct($message, $code = 0)
-	{
-		parent::__construct($message, $code);
-	}
-
-	public function __toString()
-	{
-		return $this->message;
-	}
-}
+include_once 'GpioAccess.php';
+include_once 'GpioException.php';
+include_once 'ShellException.php';
 
 class Gpio
 {
@@ -72,7 +61,11 @@ class Gpio
 		}
 		catch (GpioException $e)
 		{
-			throw new GpioException('ne peut obtenir le value');
+			throw new \GpioException('GPIO Exception => ' . $e);
+		}
+		catch (ShellException $e)
+		{
+			throw new \ShellException('Shell Exception => ' . $e);
 		}
 		
 		return $retour;
@@ -101,20 +94,14 @@ class Gpio
 			}
 		
 		}
-		catch (GpioException $e)
+		catch (\GpioException $e)
 		{
-			throw new GpioException('impossible de changer l\'etat du gpio');
+			throw new \GpioException('impossible de changer l\'etat du gpio => ' . $e);
 		}
-		// execute la commande shell pour modifier l'etat du gpio
-		
-		//$command = 'gpio -g mode ' . $this->_pin . ' out && gpio -g write ' . $this->_pin . ' ' . $state_parameter ;
-		//exec($command, $sortie_script, $return_var);
-		
-		// exception en cas d'errorlevel different de 0
-		/* if ($return_var != 0)
+		catch (\ShellException $e)
 		{
-			throw new GpioException('erreur script code retour' . $return_var);
-		} */
+			throw new \ShellException('probleme shell => ' . $e);
+		}
 		
 	}
 	
@@ -128,7 +115,7 @@ class Gpio
 		// 
 		if ($return_var != 0)
 		{
-			throw new GpioException('erreur script code retour' . $return_var);
+			throw new \GpioException('erreur script code retour' . $return_var);
 		}
 		
 		
