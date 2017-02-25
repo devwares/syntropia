@@ -113,7 +113,7 @@ class Gpio
 		
 		try
 		{
-			$valeurGpio = $this->_gpioaccess->getValue()=='1';
+			$valeurGpio = $this->_gpioaccess->getValue();
 			// si gpio valeur = 1, retourne true, si valeur = 0 retourne false, sinon -1
 			if ($valeurGpio == 1) return true; else if ($valeurGpio=='0') return false;
 			else throw new \GpioException('Classe Gpio => getState => probleme valeur gpio => ' . $e);
