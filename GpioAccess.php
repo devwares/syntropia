@@ -3,10 +3,8 @@
 // TODO : ajouter gestion exception dans chaque fonction
 
 namespace Syntropia;
-include_once 'GpioAccess.php';
 include_once 'GpioException.php';
 include_once 'ShellException.php';
-
 
 class GpioAccess
 {
