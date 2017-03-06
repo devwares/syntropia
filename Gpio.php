@@ -37,6 +37,7 @@ class Gpio
 	
 	/******************************************************************************
 	 * Constructeur : attend une chaine et un numero de pin pour le gpio
+	 * todo : ctrl presence package wiringpi ici ou dans gpioaccess ?
 	 ******************************************************************************/
 	public function __construct($name, $pin) // $name = string, $pin = int
 	

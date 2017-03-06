@@ -21,8 +21,6 @@ class GpioAccess
 	
 		// note : ajouter des controles
 		$this->_pin=$pin;
-		
-		// ajouter un controle pour voir si shell et gpio repondent
 	
 	}
 
