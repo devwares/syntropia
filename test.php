@@ -52,7 +52,7 @@ CONTROLE DES GPIO<br></br>
 /******************************************************************************
  * Instancie systematiquement tous les gpios à utiliser
  ******************************************************************************/
-$tab_gpio=init_gpios(26);
+$tab_gpio=init_gpios(28);
 
 /******************************************************************************
  * Si requete de type POST validee, fait un "set" sur les objets selon params
@@ -64,12 +64,15 @@ if (isset($_POST['gpio_post_request']) and $_POST['gpio_post_request']=='true')
 	try 
 	{
 		
-		// boucle sur chaque gpio instancie, et change son etat si la requete POST l'exige
+		// boucle sur chaque gpio instancie, et change son etat si contenu dans la requete
 		$max=Gpio::getNumber();
 		for ($cpt=1; $cpt < $max; $cpt++)
 
 		{
-			if (isset($_POST['gpio'. $cpt]) AND $_POST['gpio' .$cpt] == 'on') mod_gpio($tab_gpio[$cpt], true); else mod_gpio($tab_gpio[$cpt], false);
+			if (isset($_POST['gpio'. $cpt]))
+			{
+				if ($_POST['gpio' .$cpt] == 'on') mod_gpio($tab_gpio[$cpt], true); else mod_gpio($tab_gpio[$cpt], false);
+			}
 		}
 
 	}
