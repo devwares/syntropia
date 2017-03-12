@@ -19,6 +19,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301, USA.
  * 
+ * TODO : commencer à faire une page test2/test3 en ne prenant que les 8 gpio du relai
+ * 
+ * TODO : 	1) faire classe Interrupteur qui herite de Gpio ?
+ * 			réécrire méthodes qui allume et éteigne
+ * 			exemple pour bouton lumiere ext : off -> sleep 1 -> on
+ * 
+ * 			ou 2) ajouter méthode "clignoter" et "appui court" ?
+ * 
+ * TODO :	Corriger probleme des case décochée non envoyées dans le POST via formulaire
+ * 			Envisager de passer de checkbox à bouton radio (à priori c'est le mieux)
+ * 			Changer "on"/"" en "open"/"close"
+ * 
  * 
  */
 
@@ -157,7 +169,7 @@ function alerte($message)
 			// verifie l'etat du gpio, coche la case si le resultat du getState est positif
 			try
 			{
-				if ($tab_gpio[$cpt]->getState()) echo ' checked';
+				if ($tab_gpio[$cpt]->getState()) echo 'checked';
 			}
 			catch (\GpioException $e)
 			{
