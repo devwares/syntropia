@@ -27,11 +27,6 @@
  * 
  * 			ou 2) ajouter méthode "clignoter" et "appui court" ?
  * 
- * TODO :	Corriger probleme des case décochée non envoyées dans le POST via formulaire
- * 			Envisager de passer de checkbox à bouton radio (à priori c'est le mieux)
- * 			Changer "on"/"" en "open"/"close"
- * 
- * 
  */
 
 /*	$command = 'gpio -g mode ' . $data['gpio_number'] . ' out && gpio -g write ' . $data['gpio_number'] . ' ' . $data['gpio_state'] ;
@@ -83,7 +78,7 @@ if (isset($_POST['gpio_post_request']) and $_POST['gpio_post_request']=='true')
 		{
 			if (isset($_POST['gpio'. $cpt]))
 			{
-				if ($_POST['gpio' .$cpt] == 'on') mod_gpio($tab_gpio[$cpt], true); else mod_gpio($tab_gpio[$cpt], false);
+				if ($_POST['gpio' .$cpt] == 'high') mod_gpio($tab_gpio[$cpt], true); else if ($_POST['gpio' .$cpt] == 'low') mod_gpio($tab_gpio[$cpt], false);
 			}
 		}
 
@@ -194,12 +189,12 @@ function alerte($message)
 			
 			// affiche le boutton radio 'High'
 			echo '<TH>';
-			echo '<input type="radio" value="on" name="gpio'. $cpt . '" ';
+			echo '<input type="radio" value="high" name="gpio'. $cpt . '" ';
 			if ($tmpvar_radio_gpio_high) echo 'checked';
 			echo '/>High';
  			
 			// affiche le boutton radio 'Low'
- 			echo '<input type="radio" value="" name="gpio'. $cpt . '" ';
+ 			echo '<input type="radio" value="low" name="gpio'. $cpt . '" ';
  			if (!$tmpvar_radio_gpio_high) echo 'checked';
  			echo '/>Low';
  			echo '</TH>';
