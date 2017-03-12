@@ -157,37 +157,71 @@ function alerte($message)
 
 	<form  action="test.php" method="post" enctype="multipart/form-data">
 
+	<TABLE BORDER="1">
+	<TR>
+	<TH>Etat</TH>
+	<TH>Nom</TH>
+	<TH>Statut</TH>
+	</TR>
+
 	<?php	
 	
-		// boucle sur tous les gpio instancies, et cree un label et une checkbox pour chaque
+		// boucle sur tous les gpio instancies, et cree un label et deux radiobuttons pour chaque
 		$max=Gpio::getNumber();
+		
 		for ($cpt=1; $cpt < $max; $cpt++)
 
 		{
-			echo '<input type="checkbox" name="gpio'. $cpt . '" id="idcase' . $cpt . '" ';
 			
 			// verifie l'etat du gpio, coche la case si le resultat du getState est positif
 			try
 			{
-				if ($tab_gpio[$cpt]->getState()) echo 'checked';
+				$tmpvar_radio_gpio_high = $tab_gpio[$cpt]->getState(); // remplace "echo 'checked';"
 			}
 			catch (\GpioException $e)
 			{
-				// si probleme d'acces au gpio, la case est desactivee
-				echo 'disabled=true';
+				// si probleme d'acces au gpio
+				$tmpvar_radio_gpio_disabled = true;
 			}
 			catch (\ShellException $e)
 			{
-				// si probleme d'execution du programme shell, la case est desactivee
-				echo 'disabled=true';
+				// si probleme d'execution du programme shell
+				$tmpvar_radio_gpio_disabled = true;
 			}
+
+			// Debut ligne de tableau du gpio en cours
+			echo '<TR>';
 			
-			echo ' /> <label for="idcase' . $cpt . '">GPIO ' . $cpt . '</label>';
-			echo ' => ' . $tab_gpio[$cpt];
-			echo '<br>';
+			// affiche le boutton radio 'High'
+			echo '<TH>';
+			echo '<input type="radio" value="on" name="gpio'. $cpt . '" ';
+			if ($tmpvar_radio_gpio_high) echo 'checked';
+			echo '/>High';
+ 			
+			// affiche le boutton radio 'Low'
+ 			echo '<input type="radio" value="" name="gpio'. $cpt . '" ';
+ 			if (!$tmpvar_radio_gpio_high) echo 'checked';
+ 			echo '/>Low';
+ 			echo '</TH>';
+ 			
+ 			// affiche le nom du gpio
+			echo '<TH>';
+ 			echo 'GPIO ' . $cpt;
+			echo '</TH>';
+ 			
+ 			// affiche le statut (tostring) du gpio
+			echo '<TH>';
+			echo $tab_gpio[$cpt];
+			echo '</TH>';
+
+			// fin ligne de tableau du gpio en cours
+			echo '</TR>';
 		}
 		
+	
 	?>
+
+		</TABLE>
 	
 		<!-- input cache pour savoir si un post a ete effectue depuis ce fichier -->
 		<input type="hidden" value="true" name="gpio_post_request" />
