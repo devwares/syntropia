@@ -73,17 +73,39 @@ class GpioAccess
 	 * modifie un gpio en mode "high" (1)
 	 * renvoie un array qui contient la sortie de la commande
 	 ******************************************************************************/
-	public function High()
+	public function High($tempo) // attend une temporisation en secondes
 	
 	{
 
+		// 1ere commande : passer en etat 1
+
 		$command = 'gpio -g write ' . $this->_pin . ' 1' ;
+		
 		exec($command, $sortie_script, $return_var);
 		
 		if ($return_var != 0)
 		{
 			// si la commande retourne une erreur, genere une exception
-			throw new \ShellException('GpioAccess => High() => exception shell - code retour : ' . $return_var);
+			throw new \ShellException('GpioAccess => High() 1 => exception shell "' . $command . '" - code retour : ' . $return_var);
+		}
+
+
+		// 2e commande (si $tempo > 0) : respecter une pause et remettre en etat 0
+		
+		if ($tempo > 0)
+		{
+
+			// todo : ajouter contrôle durée
+			$command = 'sleep ' . $tempo . ' && gpio -g write ' . $this->_pin . ' 0' ;
+
+			exec($command, $sortie_script, $return_var);
+			
+			if ($return_var != 0)
+			{
+				// si la commande retourne une erreur, genere une exception
+				throw new \ShellException('GpioAccess => High() 2 => exception shell "' . $command . '" - code retour : ' . $return_var);
+			}
+
 		}
 		
 		return $sortie_script;
@@ -94,17 +116,40 @@ class GpioAccess
 	 * modifie un gpio en mode "low" (0)
 	 * renvoie un array qui contient la sortie de la commande
 	 ******************************************************************************/
-	public function Low()
+	public function Low($tempo)
 	
 	{
 
-		$command = 'gpio -g write ' . $this->_pin . ' 0' ;
+		// 1ere commande : passer en etat 0
+		
+		$command = 'gpio -g write ' . $this->_pin . ' 0';
 		exec($command, $sortie_script, $return_var);
+		
+		// fonctionne : $command2 = 'sleep 1 && gpio -g write ' . $this->_pin . ' 1' ;
+		//	exec($command2, $sortie_script, $return_var);
 		
 		if ($return_var != 0)
 		{
 			// si la commande retourne une erreur, genere une exception
-			throw new \ShellException('GpioAccess => Low() => exception shell - code retour : ' . $return_var);
+			throw new \ShellException('GpioAccess => Low() 1 => exception shell "' . $command . '" - code retour : ' . $return_var);
+		}
+		
+		// 2e commande (si $tempo > 0) : respecter une pause et remettre en etat 1
+		
+		if (floatval($tempo) > 0)
+		{
+		
+			// todo : ajouter contrôle durée
+			$command = 'sleep ' . $tempo . ' && gpio -g write ' . $this->_pin . ' 1' ;
+		
+			exec($command, $sortie_script, $return_var);
+				
+			if ($return_var != 0)
+			{
+				// si la commande retourne une erreur, genere une exception
+				throw new \ShellException('GpioAccess => Low() 2 => exception shell "' . $command . '" - code retour : ' . $return_var);
+			}
+		
 		}
 		
 		return $sortie_script;

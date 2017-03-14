@@ -79,7 +79,10 @@ if (isset($_POST['gpio_post_request']) and $_POST['gpio_post_request']=='true')
 		{
 			if (isset($_POST['gpio'. $cpt]))
 			{
-				if ($_POST['gpio' .$cpt] == 'high') mod_gpio($tab_gpio[$cpt], true); else if ($_POST['gpio' .$cpt] == 'low') mod_gpio($tab_gpio[$cpt], false);
+				// temporisation : si gpio??tempo existe (?? = numero pin), stocker dans $tempo à passer en argument, sinon $tempo = 0
+				if(isset($_POST['gpio'. $cpt .'tempo'])) $tempo = $_POST['gpio'. $cpt .'tempo']; else $tempo = 0;
+				// appelle fonction mod_gpio avec true ou false selon que gpio?? (?? = numero pin) contienne 'high' ou 'low'
+				if ($_POST['gpio' .$cpt] == 'high') mod_gpio($tab_gpio[$cpt], true, $tempo); else if ($_POST['gpio' .$cpt] == 'low') mod_gpio($tab_gpio[$cpt], false, $tempo);
 			}
 		}
 
@@ -114,12 +117,12 @@ function init_gpios($max_gpio)
 /******************************************************************************
  * modifie l'etat d'un gpio specifié en parametre
  ******************************************************************************/
-function mod_gpio(Gpio $gpio, $gpio_state)
+function mod_gpio(Gpio $gpio, $gpio_state, $tempo)
 {
 	
 	try
 	{
-		$gpio->setState($gpio_state);
+		$gpio->setState($gpio_state, $tempo);
 	}
 	catch (\GpioException $e)
 	{

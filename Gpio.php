@@ -82,7 +82,7 @@ class Gpio
 	/******************************************************************************
 	 * Modifie l'etat d'un gpio pendant n secondes (n = 0 pour infini)
 	 ******************************************************************************/
-	public function setState($state, $delay) // attend un booleen, et un délai (0 = infini)
+	public function setState($state, $tempo) // attend un booleen, et une temporisation (0 = infini)
 
 	{
 		
@@ -90,7 +90,7 @@ class Gpio
 		{
 			$this->_gpioaccess->Out();
 			// initialise le parametre a passer a la commande shell selon l'etat
-			if ($state) {$this->_gpioaccess->High();} else {$this->_gpioaccess->Low();}
+			if ($state) {$this->_gpioaccess->High($tempo);} else {$this->_gpioaccess->Low($tempo);}
 		}
 		
 		catch (\GpioException $e)
