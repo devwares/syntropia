@@ -27,6 +27,7 @@
  * 
  * 			ou 2) ajouter méthode "clignoter" et "appui court" ?
  * 
+ * TODO :	Ajouter Out et In avec radiobuttons
  */
 
 /*	$command = 'gpio -g mode ' . $data['gpio_number'] . ' out && gpio -g write ' . $data['gpio_number'] . ' ' . $data['gpio_state'] ;
@@ -59,7 +60,7 @@ CONTROLE DES GPIO<br></br>
 /******************************************************************************
  * Instancie systematiquement tous les gpios à utiliser
  ******************************************************************************/
-$tab_gpio=init_gpios(28);
+$tab_gpio=init_gpios(32);
 
 /******************************************************************************
  * Si requete de type POST validee, fait un "set" sur les objets selon params

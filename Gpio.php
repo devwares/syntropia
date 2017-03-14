@@ -80,9 +80,9 @@ class Gpio
 	
 	
 	/******************************************************************************
-	 * Modifie l'etat d'un gpio (true ou false = 1 ou 0)
+	 * Modifie l'etat d'un gpio pendant n secondes (n = 0 pour infini)
 	 ******************************************************************************/
-	public function setState($state) // attend un booleen
+	public function setState($state, $delay) // attend un booleen, et un délai (0 = infini)
 
 	{
 		
