@@ -1,0 +1,32 @@
+body{width:100%;margin:auto;}
+
+#menu_gpio {
+    position: fixed;
+    height: 100%;
+    width: 100%
+
+}
+
+input[type=submit]
+{
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    height: 2em;
+	font-size: xx-large;
+
+}
+
+#prise-garage_tempo
+{
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: 20em;
+    height: 2em;
+    font-size: larger;
+    
+}

@@ -1,7 +1,5 @@
 <?php
 
-// TODO : ajouter gestion exception dans chaque fonction
-
 namespace Syntropia;
 include_once 'GpioException.php';
 include_once 'ShellException.php';
@@ -86,7 +84,7 @@ class GpioAccess
 		if ($return_var != 0)
 		{
 			// si la commande retourne une erreur, genere une exception
-			throw new \ShellException('GpioAccess => High() 1 => exception shell "' . $command . '" - code retour : ' . $return_var);
+			throw new \ShellException('GpioAccess => High() => exception shell "' . $command . '" - code retour : ' . $return_var);
 		}
 
 
@@ -103,7 +101,7 @@ class GpioAccess
 			if ($return_var != 0)
 			{
 				// si la commande retourne une erreur, genere une exception
-				throw new \ShellException('GpioAccess => High() 2 => exception shell "' . $command . '" - code retour : ' . $return_var);
+				throw new \ShellException('GpioAccess => High() => exception shell "' . $command . '" - code retour : ' . $return_var);
 			}
 
 		}
@@ -131,7 +129,7 @@ class GpioAccess
 		if ($return_var != 0)
 		{
 			// si la commande retourne une erreur, genere une exception
-			throw new \ShellException('GpioAccess => Low() 1 => exception shell "' . $command . '" - code retour : ' . $return_var);
+			throw new \ShellException('GpioAccess => Low() => exception shell "' . $command . '" - code retour : ' . $return_var);
 		}
 		
 		// 2e commande (si $tempo > 0) : respecter une pause et remettre en etat 1
@@ -147,7 +145,7 @@ class GpioAccess
 			if ($return_var != 0)
 			{
 				// si la commande retourne une erreur, genere une exception
-				throw new \ShellException('GpioAccess => Low() 2 => exception shell "' . $command . '" - code retour : ' . $return_var);
+				throw new \ShellException('GpioAccess => Low() => exception shell "' . $command . '" - code retour : ' . $return_var);
 			}
 		
 		}

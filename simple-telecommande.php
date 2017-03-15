@@ -50,6 +50,7 @@ include_once 'ShellException.php';
 	<title>sans titre</title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<meta name="generator" content="Geany 1.24.1" />
+	<link rel="stylesheet" type="text/css" href="css/simple-telecommande.css">
 </head>
 
 <body>
@@ -63,13 +64,6 @@ $tab_gpio[] = new Gpio('neon-garage', 17);
 $tab_gpio[] = new Gpio('prise-garage', 18);
 $tab_gpio[] = new Gpio('lumiere-exterieure', 27);
 
-
-foreach ( $tab_gpio as $gpio )
-{
-	echo $gpio;
-}
-
-echo '<br><br>';
 
 /******************************************************************************
 * Si requete de type POST validee
@@ -130,13 +124,16 @@ function mod_gpio(Gpio $gpio, $gpio_state, $tempo)
 
 ?>
 
+
+<div id="menu_gpio">
+
+<table>
+
 <form action="simple-telecommande.php" method="post" enctype="multipart/form-data">
 	<input type="hidden" value="true" name="gpio_post_request" />
 	<input type="hidden" value="low" name="neon-garage_state" />
 	<input type="submit" value="ALLUMER NEON GARAGE" />
 </form>
-
-<br>
 
 <form action="simple-telecommande.php" method="post" enctype="multipart/form-data">
 	<input type="hidden" value="true" name="gpio_post_request" />
@@ -144,7 +141,7 @@ function mod_gpio(Gpio $gpio, $gpio_state, $tempo)
 	<input type="submit" value="ETEINDRE NEON GARAGE" />
 </form>
 
-<br><br>
+
 
 <form action="simple-telecommande.php" method="post" enctype="multipart/form-data">
 	<input type="hidden" value="true" name="gpio_post_request" />
@@ -153,22 +150,25 @@ function mod_gpio(Gpio $gpio, $gpio_state, $tempo)
 	<input type="submit" value="SWITCHER LUMIERE EXTERIEURE" />
 </form>
 
-<br><br>
 
 <form action="simple-telecommande.php" method="post" enctype="multipart/form-data">
 	<input type="hidden" value="true" name="gpio_post_request" />
 	<input type="hidden" value="low" name="prise-garage_state" />
 	<input type="submit" value="ALLUMER PRISE GARAGE" />
-	duree (0 = infini) : <input type="text" name="prise-garage_tempo" value=0>
+	<p id="prise-garage_tempo">
+	<input type="text" name="prise-garage_tempo" value=0></input>sec. (0 = infini)
+	</p>
 </form>
-
-<br>
 
 <form action="simple-telecommande.php" method="post" enctype="multipart/form-data">
 	<input type="hidden" value="true" name="gpio_post_request" />
 	<input type="hidden" value="high" name="prise-garage_state" />
-	<input type="submit" value="COUPER PRISE GARAGE" />
+	<input type="submit" value="COUPER PRISE GARAGE"/>
 </form>
+
+</table>
+
+</div>
 
 </body>
 
