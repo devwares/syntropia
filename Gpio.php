@@ -135,13 +135,13 @@ class Gpio
 		return self::$_number_of_gpios;
 	}
 	
-	public static function getName()
+	public function getName()
 	
 	{
 		return $this->_name;
 	}
 	
-	public static function getPin()
+	public function getPin()
 	
 	{
 		return $this->_pin;
