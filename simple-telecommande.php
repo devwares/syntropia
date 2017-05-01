@@ -29,6 +29,7 @@
  * 			ou 2) ajouter méthode "clignoter" et "appui court" ?
  * 
  * TODO :	Ajouter Out et In avec radiobuttons
+ * TODO :	Gestion utilisateurs Apache pour les droits (afficher ou non tel ou tel bouton, accepter acces tel ou tel gpio)
  */
 
 /*	$command = 'gpio -g mode ' . $data['gpio_number'] . ' out && gpio -g write ' . $data['gpio_number'] . ' ' . $data['gpio_state'] ;
@@ -47,7 +48,7 @@ include_once 'ShellException.php';
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-	<title>sans titre</title>
+	<title>Telecommande</title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<meta name="generator" content="Geany 1.24.1" />
 	<link rel="stylesheet" type="text/css" href="css/simple-telecommande.css">

@@ -138,7 +138,7 @@ class GpioAccess
 		{
 		
 			// todo : ajouter contrôle durée
-			$command = 'sleep ' . $tempo . ' && gpio -g write ' . $this->_pin . ' 1' ;
+			$command = 'nohup sleep ' . $tempo . ' && gpio -g write ' . $this->_pin . ' 1 &' ;
 		
 			exec($command, $sortie_script, $return_var);
 				
