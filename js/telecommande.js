@@ -21,7 +21,7 @@ $(document).ready(function()
 			
 			$("#NeonGarageOff").on('click', function(even) {
 				
-				$.post('simple-telecommande.php',{ gpio_post_request:true, neonGarage_state: 'high'});
+				$.post('Lumiere.php',{ pin:17, state:'high'});
 				/* $.post('testpost.php',{ id:50, nom: 'durand'}); */
 				
 			});
