@@ -42,20 +42,54 @@ class Lumiere extends Gpio
 		
 		try
 		{
-			//$retour='name='.$this->_name.', pin number='.$this->_pin. ', label='.$this->_label.', state='.$this->_gpioaccess->getValue();
 			
-			$retour='toto';
+			// Gpio High = Lumiere actuellement eteinte
 			if ($this->_gpioaccess->getValue()==1)
 			{
 				$retour='High';
 			}
+			
+			// Gpio Low = Lumiere actuellement allumee
 			elseif($this->_gpioaccess->getValue()==0)
 			{
-				$retour='Low';
+				$retour='
+					ZONE TOTO
+					<div id="zonetoto">Cette ligne disparaitra si le javascript fonctionne</div>
+						
+						
+<table>
+	<tr>
+  		<th>Nom-de-la-lumiere</th>
+ 	</tr>
+ 	<tr>
+  		<th><img id="NeonGarageOff" src="img/Lumiere-on.png"></img></th>
+  	</tr>
+</table>
+
+					<script type="text/javascript">
+						$(document).ready(function()
+						{
+				
+							/* Instructions Témoin */
+							 $("#zonetoto").hide(1500);
+				
+							/* Instructions Réelles */
+							$("#NeonGarageOff").on(\'click\', function(even) {
+								
+								$.load(\'Lumiere.php\',{ pin:17, state:\'low\'});
+								
+							});
+				
+				
+						});
+					</script>
+						';
 			}
+			
+			// Gpio -1 = erreur ?
 			elseif($this->_gpioaccess->getValue()==-1)
 			{
-				$retour='-1';
+				$retour='Erreur : etat anormal du GPIO';
 			}
 			
 		}
