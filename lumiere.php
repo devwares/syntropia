@@ -46,8 +46,8 @@ class Lumiere extends Gpio
 			{
 				$retour='
 					<div id="zonetoto">Cette ligne disparaitra si le javascript fonctionne</div>
-				
-				
+						
+						
 <table>
 	<tr>
   		<th>Neon Garage</th>
@@ -56,7 +56,7 @@ class Lumiere extends Gpio
   		<th><img id="NeonGarage" src="img/lumiere-off.png"></img></th>
   	</tr>
 </table>
-				
+
 					<script type="text/javascript">
 						$(document).ready(function()
 						{
@@ -66,9 +66,9 @@ class Lumiere extends Gpio
 				
 							/* Instructions Réelles */
 							$("#NeonGarage").on(\'click\', function(even) {
-				
+								
 								$("#zonetoto").load(\'lumiere.php\',{ pin:18, state:\'low\'});
-				
+								
 							});
 				
 				
