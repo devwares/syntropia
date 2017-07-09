@@ -17,8 +17,10 @@ if (isset($_POST['pin']) and isset($_POST['state']))
 		// Instancie un Gpio
 		$postGpio = new Gpio('postgpio', $pin);
 		
+		echo $postGpio;
+		
 		// Modifie l'état du Gpio, avec comme délai 0 puisqu'il s'agit d'un objet de type Lumiere
-		$postGpio->setState($state, 0);
+		$postGpio->setState(false, 0);
 		
 	}
 	catch (Exception $e)
