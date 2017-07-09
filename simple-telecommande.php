@@ -35,12 +35,12 @@
 /*	$command = 'gpio -g mode ' . $data['gpio_number'] . ' out && gpio -g write ' . $data['gpio_number'] . ' ' . $data['gpio_state'] ;
 	exec($command, $sortie_script, $return_var); */
 
-namespace Syntropia;
+namespace syntropia;
 
-include_once 'Gpio.php';
-include_once 'GpioAccess.php';
-include_once 'GpioException.php';
-include_once 'ShellException.php';
+include_once 'gpio.php';
+include_once 'gpioaccess.php';
+include_once 'gpioexception.php';
+include_once 'shellexception.php';
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
