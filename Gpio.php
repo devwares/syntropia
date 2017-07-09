@@ -30,22 +30,25 @@ include_once 'ShellException.php';
 class Gpio
 {
 
-	private static $_number_of_gpios = 0;
-	private $_name;
-	private $_pin;
+	protected static $_number_of_gpios = 0;
+	protected $_name;
+	protected $_pin;
+	protected $_label;
 
 	
 	/******************************************************************************
-	 * Constructeur : attend une chaine et un numero de pin pour le gpio
+	 * Constructeur : attend une chaine pour le nom et un numero de pin pour le gpio
+	 * 				facultatif, attend un label sinon s'appellera "sans nom"
 	 * todo : ctrl presence package wiringpi ici ou dans gpioaccess ?
 	 ******************************************************************************/
-	public function __construct($name, $pin) // $name = string, $pin = int
+	public function __construct($name, $pin, $label = 'Sans nom') // $name = string, $pin = int, $label = string
 	
 	{		
 		
 		// note : ajouter des controles
 		$this->_name=$name;
 		$this->_pin=$pin;
+		$this->_label=$label;
 		
 		// instancie un GpioAccess
 		$this->_gpioaccess=new GpioAccess($pin);
@@ -64,7 +67,7 @@ class Gpio
 		
 		try
 		{
-			$retour='name='.$this->_name.', pin number='.$this->_pin.', state='.$this->_gpioaccess->getValue();
+			$retour='name='.$this->_name.', pin number='.$this->_pin. ', label='.$this->_label.', state='.$this->_gpioaccess->getValue();
 		}
 		catch (GpioException $e)
 		{
