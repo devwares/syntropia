@@ -67,7 +67,7 @@ class Lumiere extends Gpio
 							/* Instructions Réelles */
 							$("#NeonGarage").on(\'click\', function(even) {
 				
-								$("#zonetoto").load(\'lumiere.php\',{ pin:17, state:\'low\'});
+								$("#zonetoto").load(\'lumiere.php\',{ pin:18, state:\'low\'});
 				
 							});
 				
@@ -103,7 +103,7 @@ class Lumiere extends Gpio
 							/* Instructions Réelles */
 							$("#NeonGarage").on(\'click\', function(even) {
 								
-								$("#zonetoto").load(\'lumiere.php\',{ pin:17, state:\'high\'});
+								$("#zonetoto").load(\'lumiere.php\',{ pin:18, state:\'high\'});
 								
 							});
 				
