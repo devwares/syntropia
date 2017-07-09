@@ -1,6 +1,6 @@
 <?php
-namespace Syntropia;
-include_once 'Gpio.php';
+namespace syntropia;
+include_once 'gpio.php';
 
 
 // Détecte si requete post et bons arguments, auquel cas déclenche l'acces GPIO :
