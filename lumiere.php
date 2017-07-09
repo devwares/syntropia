@@ -2,6 +2,9 @@
 namespace syntropia;
 include_once 'gpio.php';
 
+//		$commande = 'echo postgpio = ' + $postGpio + ' > /tmp/testphp.txt';
+//		exec($commande);		
+
 
 // Détecte si requete post et bons arguments, auquel cas déclenche l'acces GPIO :
 if (isset($_POST['pin']) and isset($_POST['state']))
@@ -10,6 +13,7 @@ if (isset($_POST['pin']) and isset($_POST['state']))
 	try
 	{
 		
+
 		// Récupère les paramètres
 		$pin = $_POST['pin'];
 		$state = $_POST['state'];
@@ -17,10 +21,12 @@ if (isset($_POST['pin']) and isset($_POST['state']))
 		// Instancie un Gpio
 		$postGpio = new Gpio('postgpio', $pin);
 		
-		echo $postGpio;
-		
 		// Modifie l'état du Gpio, avec comme délai 0 puisqu'il s'agit d'un objet de type Lumiere
-		$postGpio->setState(false, 0);
+		$postGpio->setState($state, 0);
+
+		$commande = 'echo $state='.$state.' >> /tmp/toto.txt';
+		exec($commande);
+
 		
 	}
 	catch (Exception $e)
@@ -69,7 +75,7 @@ class Lumiere extends Gpio
 							/* Instructions Réelles */
 							$("#NeonGarage").on(\'click\', function(even) {
 								
-								$("#zonetoto").load(\'lumiere.php\',{ pin:18, state:\'low\'});
+								$("#zonetoto").load(\'lumiere.php\',{ pin:18, state:0});
 								
 							});
 				
@@ -105,7 +111,7 @@ class Lumiere extends Gpio
 							/* Instructions Réelles */
 							$("#NeonGarage").on(\'click\', function(even) {
 								
-								$("#zonetoto").load(\'lumiere.php\',{ pin:18, state:\'high\'});
+								$("#zonetoto").load(\'lumiere.php\',{ pin:18, state:1});
 								
 							});
 				
