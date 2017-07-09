@@ -53,7 +53,7 @@ class Lumiere extends Gpio
   		<th>Neon Garage</th>
  	</tr>
  	<tr>
-  		<th><img id="NeonGarage" src="img/Lumiere-off.png"></img></th>
+  		<th><img id="NeonGarage" src="img/lumiere-off.png"></img></th>
   	</tr>
 </table>
 				
@@ -67,7 +67,7 @@ class Lumiere extends Gpio
 							/* Instructions Réelles */
 							$("#NeonGarage").on(\'click\', function(even) {
 				
-								$("#zonetoto").load(\'Lumiere.php\',{ pin:17, state:\'low\'});
+								$("#zonetoto").load(\'lumiere.php\',{ pin:17, state:\'low\'});
 				
 							});
 				
@@ -89,7 +89,7 @@ class Lumiere extends Gpio
   		<th>Neon Garage</th>
  	</tr>
  	<tr>
-  		<th><img id="NeonGarage" src="img/Lumiere-on.png"></img></th>
+  		<th><img id="NeonGarage" src="img/lumiere-on.png"></img></th>
   	</tr>
 </table>
 
@@ -103,7 +103,7 @@ class Lumiere extends Gpio
 							/* Instructions Réelles */
 							$("#NeonGarage").on(\'click\', function(even) {
 								
-								$("#zonetoto").load(\'Lumiere.php\',{ pin:17, state:\'high\'});
+								$("#zonetoto").load(\'lumiere.php\',{ pin:17, state:\'high\'});
 								
 							});
 				
