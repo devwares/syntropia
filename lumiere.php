@@ -67,9 +67,9 @@ class Lumiere extends Gpio
 							 $("#zonetoto").hide(1500);
 				
 							/* Instructions Réelles */
-							$("#NeonGarageOff").on(\'click\', function(even) {
+							$("#NeonGarage").on(\'click\', function(even) {
 				
-								$.post(\'Lumiere.php\',{ pin:17, state:\'low\'});
+								$("#zonetoto").load(\'Lumiere.php\',{ pin:17, state:\'low\'});
 				
 							});
 				
@@ -103,9 +103,9 @@ class Lumiere extends Gpio
 							 $("#zonetoto").hide(1500);
 				
 							/* Instructions Réelles */
-							$("#NeonGarageOff").on(\'click\', function(even) {
+							$("#NeonGarage").on(\'click\', function(even) {
 								
-								$.post(\'Lumiere.php\',{ pin:17, state:\'high\'});
+								$("#zonetoto").load(\'Lumiere.php\',{ pin:17, state:\'high\'});
 								
 							});
 				
