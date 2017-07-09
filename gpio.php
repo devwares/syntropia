@@ -22,10 +22,10 @@
  * TODO : limite le nombre d'objets possibles en fonction du modele de raspberry
  * 
  */
-namespace Syntropia;
-include_once 'GpioAccess.php';
-include_once 'GpioException.php';
-include_once 'ShellException.php';
+namespace syntropia;
+include_once 'gpioaccess.php';
+include_once 'gpioexception.php';
+include_once 'shellexception.php';
 
 class Gpio
 {

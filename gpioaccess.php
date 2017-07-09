@@ -1,8 +1,8 @@
 <?php
 
-namespace Syntropia;
-include_once 'GpioException.php';
-include_once 'ShellException.php';
+namespace syntropia;
+include_once 'gpioexception.php';
+include_once 'shellexception.php';
 
 class GpioAccess
 {
