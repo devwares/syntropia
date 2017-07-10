@@ -47,7 +47,7 @@ include_once 'shellexception.php';
 //$neonGarage = new Gpio('gpio17', 17);
 //$priseGarage = new Gpio('gpio18', 18);
 //$lumiereExt = new Gpio('gpio27', 27);
-$neonGarage = new Lumiere('neonGarage', 18);
+$neonGarage = new Lumiere('neonGarage', 17);
 
 //$testLumiere = new Lumiere();
 
