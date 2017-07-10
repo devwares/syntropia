@@ -1,3 +1,5 @@
 PROCHAINS COMMITS
 
 - annotation dans gpioaccess.php
+- ajout du fichier commit.txt
+- modification des fichier images (interrupteur)
