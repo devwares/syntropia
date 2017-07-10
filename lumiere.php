@@ -2,41 +2,9 @@
 namespace syntropia;
 include_once 'gpio.php';
 
-//		$commande = 'echo postgpio = ' + $postGpio + ' > /tmp/testphp.txt';
-//		exec($commande);		
+//$commande = 'echo $state='.$state.' >> /tmp/toto.txt';
+//exec($commande);
 
-
-// Détecte si requete post et bons arguments, auquel cas déclenche l'acces GPIO :
-if (isset($_POST['pin']) and isset($_POST['state']))
-{
-
-	try
-	{
-		
-
-		// Récupère les paramètres
-		$pin = $_POST['pin'];
-		$state = $_POST['state'];
-		
-		// Instancie un Gpio
-		$postGpio = new Gpio('postgpio', $pin);
-		
-		// Modifie l'état du Gpio, avec comme délai 0 puisqu'il s'agit d'un objet de type Lumiere
-		$postGpio->setState($state, 0);
-
-		$commande = 'echo $state='.$state.' >> /tmp/toto.txt';
-		exec($commande);
-
-		
-	}
-	catch (Exception $e)
-	{
-		throw new \GpioException('Lumiere Exception => ' . $e);
-	}
-	
-}
-
-// Partie objet pour instantiation par autre classe/page
 class Lumiere extends Gpio
 {
 
@@ -49,84 +17,63 @@ class Lumiere extends Gpio
 		try
 		{
 			
+			$nomdiv = 'div' . $this->_name;
+			$idimg = 'img' . $this->_name;
+			$pin = $this->_pin;
+			$label = $this->_label;
+			
 			// Gpio High = Lumiere actuellement eteinte
 			if ($this->_gpioaccess->getValue()==1)
 			{
-				$retour='
-					<div id="zonetoto">Cette ligne disparaitra si le javascript fonctionne</div>
-						
-						
-<table>
-	<tr>
-  		<th>Neon Garage</th>
- 	</tr>
- 	<tr>
-  		<th><img id="NeonGarage" src="img/lumiere-off.png"></img></th>
-  	</tr>
-</table>
-
-					<script type="text/javascript">
-						$(document).ready(function()
-						{
-				
-							/* Instructions Témoin */
-							 $("#zonetoto").hide(1500);
-				
-							/* Instructions Réelles */
-							$("#NeonGarage").on(\'click\', function(even) {
-								
-								$("#zonetoto").load(\'lumiere.php\',{ pin:18, state:0});
-								
-							});
-				
-				
-						});
-					</script>
-						';
+				$image = 'img/lumiere-off.png';
+				$nextstate = '0';
 			}
-			
 			// Gpio Low = Lumiere actuellement allumee
 			elseif($this->_gpioaccess->getValue()==0)
 			{
-				$retour='
-					<div id="zonetoto">Cette ligne disparaitra si le javascript fonctionne</div>
-						
-						
-<table>
-	<tr>
-  		<th>Neon Garage</th>
- 	</tr>
- 	<tr>
-  		<th><img id="NeonGarage" src="img/lumiere-on.png"></img></th>
-  	</tr>
-</table>
-
-					<script type="text/javascript">
-						$(document).ready(function()
-						{
-				
-							/* Instructions Témoin */
-							 $("#zonetoto").hide(1500);
-				
-							/* Instructions Réelles */
-							$("#NeonGarage").on(\'click\', function(even) {
-								
-								$("#zonetoto").load(\'lumiere.php\',{ pin:18, state:1});
-								
-							});
-				
-				
-						});
-					</script>
-						';
+				$image = 'img/lumiere-on.png';
+				$nextstate = '1';
 			}
-			
 			// Gpio -1 = erreur ?
 			elseif($this->_gpioaccess->getValue()==-1)
 			{
 				$retour='Erreur : etat anormal du GPIO';
+				return $retour;
 			}
-			
+				
+			$retour='
+					<div id="' . $nomdiv . '">
+						<div id="zonetoto">Cette ligne disparaitra si le javascript fonctionne</div>
+					
+						<table>
+							<tr>
+						  		<th>Neon Garage</th>
+						 	</tr>
+						 	<tr>
+						  		<th><img id="' . $idimg . '" src="' . $image . '"></img></th>
+						  	</tr>
+						</table>
+						  				
+						<script type="text/javascript">
+							$(document).ready(function()
+							{
+					
+								/* Instructions Témoin */
+								 $("#zonetoto").hide(1500);
+					
+								/* Instructions Réelles */
+								$("#' . $idimg . '").on(\'click\', function(even) {
+									
+									/* $.post(\'lumiere.php\',{ pin:' . $pin . ', state:0}); */
+									$("#' . $nomdiv . '").load(\'lumiere.php\',{ pin:' . $pin . ', state:' . $nextstate . '});
+							
+								});
+					
+							});
+						</script>
+					</div>
+					';
+				
 		}
 		catch (GpioException $e)
 		{
@@ -139,6 +86,35 @@ class Lumiere extends Gpio
 		
 		return $retour;
 		
+	}
+
+}
+
+
+// Détecte si requete post et bons arguments, auquel cas déclenche l'acces GPIO :
+if (isset($_POST['pin']) and isset($_POST['state']))
+{
+
+	try
+	{
+
+		// Récupère les paramètres
+		$pin = $_POST['pin'];
+		$state = $_POST['state'];
+
+		// Instancie un Gpio
+		$lumiere = new Lumiere('gpioLumiere', $pin);
+
+		// Modifie l'état du Gpio, avec comme délai 0 puisqu'il s'agit d'un objet de type Lumiere
+		$lumiere->setState($state, 0);
+
+		// Affiche le nouvel interrupteur
+		echo $lumiere;
+
+	}
+	catch (Exception $e)
+	{
+		throw new \GpioException('Lumiere Exception => ' . $e);
 	}
 
 }
