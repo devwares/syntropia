@@ -16,20 +16,21 @@ class Lumiere extends Gpio
 		
 		try
 		{
-			
-			$nomdiv = 'div' . $this->_name;
-			$idimg = 'img' . $this->_name;
+			$name = $this->_name;
+			$iddiv = 'div' . $name;
+			$idimg = 'img' . $name;
 			$pin = $this->_pin;
 			$label = $this->_label;
+			$state = $this->_gpioaccess->getValue();
 			
 			// Gpio High = Lumiere actuellement eteinte
-			if ($this->_gpioaccess->getValue()==1)
+			if ($state==1)
 			{
 				$image = 'img/lumiere-off.png';
 				$nextstate = '0';
 			}
 			// Gpio Low = Lumiere actuellement allumee
-			elseif($this->_gpioaccess->getValue()==0)
+			elseif($state==0)
 			{
 				$image = 'img/lumiere-on.png';
 				$nextstate = '1';
@@ -42,37 +43,32 @@ class Lumiere extends Gpio
 			}
 				
 			$retour='
-					<div id="' . $nomdiv . '">
-						<div id="zonetoto">Cette ligne disparaitra si le javascript fonctionne</div>
-					
-						<table>
-							<tr>
-						  		<th>Neon Garage</th>
-						 	</tr>
-						 	<tr>
-						  		<th><img id="' . $idimg . '" src="' . $image . '"></img></th>
-						  	</tr>
-						</table>
-						  				
-						<script type="text/javascript">
-							$(document).ready(function()
-							{
-					
-								/* Instructions Témoin */
-								 $("#zonetoto").hide(1500);
-					
-								/* Instructions Réelles */
-								$("#' . $idimg . '").on(\'click\', function(even) {
-									
-									/* $.post(\'lumiere.php\',{ pin:' . $pin . ', state:0}); */
-									$("#' . $nomdiv . '").load(\'lumiere.php\',{ pin:' . $pin . ', state:' . $nextstate . '});
+			<div id="' . $iddiv . '">
+			
+				<table>
+					<tr>
+				  		<th>' . $label . '</th>
+				 	</tr>
+				 	<tr>
+				  		<th><img id="' . $idimg . '" src="' . $image . '"></img></th>
+				  	</tr>
+				</table>
+				  				
+				<script type="text/javascript">
+					$(document).ready(function()
+					{
+			
+						$("#' . $idimg . '").on(\'click\', function(even) {
 							
-								});
+							$("#' . $iddiv . '").load(\'lumiere.php\',{ name:"' . $name . '", pin:' . $pin . ', label:"' . $label . '", state:' . $nextstate . '});
 					
-							});
-						</script>
-					</div>
-					';
+						});
+			
+					});
+				</script>
+
+			</div>
+			';
 				
 		}
 		catch (GpioException $e)
@@ -92,18 +88,20 @@ class Lumiere extends Gpio
 
 
 // Détecte si requete post et bons arguments, auquel cas déclenche l'acces GPIO :
-if (isset($_POST['pin']) and isset($_POST['state']))
+if (isset($_POST['name']) and isset($_POST['pin']) and isset($_POST['state']) and isset($_POST['label']))
 {
 
 	try
 	{
 
 		// Récupère les paramètres
+		$name = $_POST['name'];
 		$pin = $_POST['pin'];
 		$state = $_POST['state'];
+		$label = $_POST['label'];
 
 		// Instancie un Gpio
-		$lumiere = new Lumiere('gpioLumiere', $pin);
+		$lumiere = new Lumiere('gpioLumiere', $pin, $label);
 
 		// Modifie l'état du Gpio, avec comme délai 0 puisqu'il s'agit d'un objet de type Lumiere
 		$lumiere->setState($state, 0);
