@@ -1,5 +1,5 @@
 PROCHAINS COMMITS
 
-- annotation dans gpioaccess.php
-- ajout du fichier commit.txt
-- modification des fichier images (interrupteur)
+- ajout d'une feuille de style pour telecommande.php
+- mise en page telecommande.php
+- lumiere.php modifie pour que l'image prenne 100% de son conteneur

@@ -44,16 +44,9 @@ class Lumiere extends Gpio
 				
 			$retour='
 			<div id="' . $iddiv . '">
-			
-				<table>
-					<tr>
-				  		<th>' . $label . '</th>
-				 	</tr>
-				 	<tr>
-				  		<th><img id="' . $idimg . '" src="' . $image . '"></img></th>
-				  	</tr>
-				</table>
-				  				
+					
+				<img style="width:100%;" id="' . $idimg . '" src="' . $image . '"></img>
+						
 				<script type="text/javascript">
 					$(document).ready(function()
 					{

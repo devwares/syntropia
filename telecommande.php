@@ -38,9 +38,13 @@
 		/******************************************************************************
 		 * Incorpore les interrupteurs, en fonction de l'état des GPIOs
 		 ******************************************************************************/
-		echo $neonGarage;
-		
 		?>
+		<div id="bouton-neon-garage">
+		<table>
+			<tr><?php echo $neonGarage;?></tr>
+			<tr>Neon Garage</tr>
+		</table>
+		</div>
 
 	</body>
 	

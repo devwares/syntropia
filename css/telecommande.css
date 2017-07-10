@@ -6,7 +6,11 @@ body
     color: white;
 }
 
-table
+#bouton-neon-garage
 {
+	color: red;
 	width: 50%;
+	margin: auto;
+	align: center;
+	text-align: center;
 }
