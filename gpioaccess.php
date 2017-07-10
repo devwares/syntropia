@@ -94,6 +94,7 @@ class GpioAccess
 		{
 
 			// todo : ajouter contrôle durée
+			// todo : tester en background pour libérer la page ("&")
 			$command = 'sleep ' . $tempo . ' && gpio -g write ' . $this->_pin . ' 0' ;
 
 			exec($command, $sortie_script, $return_var);
