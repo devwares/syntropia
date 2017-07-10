@@ -20,6 +20,7 @@
 		<meta charset="ISO-8859-1">
 		<title>Tests jQuery Gpio</title>
 		
+		<link rel="stylesheet" href="css/telecommande.css" />
 		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
 		<!-- <script type="text/javascript" src="js/telecommande.js"></script>  -->
 	
