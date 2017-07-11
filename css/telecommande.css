@@ -9,7 +9,16 @@ body
 #bouton-neon-garage
 {
 	color: red;
-	width: 30%;
+	width: 20%;
+	margin: auto;
+	align: center;
+	text-align: center;
+}
+
+#bouton-lumiere-ext
+{
+	color: red;
+	width: 20%;
 	margin: auto;
 	align: center;
 	text-align: center;

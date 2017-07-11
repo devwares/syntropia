@@ -44,12 +44,14 @@
 			<table>
 				<tr><?php echo $neonGarage;?></tr>
 				<tr>Neon Garage</tr>
-				<tr><br><br><br><br><br><br><br><br><br><br></tr>
-				<tr><?php echo $lumiereExt;?></tr>
-				<tr>Lumiere Exterieure</tr>
 			</table>
 		</div>
-
+		<br><br><br><br>
+		<div id="bouton-lumiere-ext">
+			<table>
+			<tr><?php echo $lumiereExt;?></tr>
+			<tr>Spots Ext</tr>
+			</table>
 	</body>
 	
 </html>
