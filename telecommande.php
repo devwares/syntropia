@@ -2,7 +2,7 @@
 
 	namespace syntropia;
 	
-	include_once 'lumiere.php';
+	include_once 'interrupteur.php';
 	include_once 'gpio.php';
 	include_once 'gpioaccess.php';
 	include_once 'gpioexception.php';
@@ -33,17 +33,16 @@
 		/******************************************************************************
 		 * Instancie les GPIO à utiliser
 		 ******************************************************************************/
-		$neonGarage = new Lumiere('neonGarage', 17, 'Neon Garage');
+		$neonGarage = new Interrupteur('neonGarage', 17, 'Neon Garage');
 		
 		/******************************************************************************
 		 * Incorpore les interrupteurs, en fonction de l'état des GPIOs
 		 ******************************************************************************/
-		?>
-		<div id="bouton-neon-garage">
-		<table>
-			<tr><?php echo $neonGarage;?></tr>
-			<tr>Neon Garage</tr>
-		</table>
+		?><div id="bouton-neon-garage">
+			<table>
+				<tr><?php echo $neonGarage;?></tr>
+				<tr>Neon Garage</tr>
+			</table>
 		</div>
 
 	</body>

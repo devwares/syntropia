@@ -5,7 +5,7 @@ include_once 'gpio.php';
 //$commande = 'echo $state='.$state.' >> /tmp/toto.txt';
 //exec($commande);
 
-class Lumiere extends Gpio
+class Interrupteur extends Gpio
 {
 
 	/******************************************************************************
@@ -23,16 +23,16 @@ class Lumiere extends Gpio
 			$label = $this->_label;
 			$state = $this->_gpioaccess->getValue();
 			
-			// Gpio High = Lumiere actuellement eteinte
+			// Gpio High = Interrupteur actuellement eteint
 			if ($state==1)
 			{
-				$image = 'img/lumiere-off.png';
+				$image = 'img/interrupteur-off.png';
 				$nextstate = '0';
 			}
-			// Gpio Low = Lumiere actuellement allumee
+			// Gpio Low = Interrupteur actuellement allume
 			elseif($state==0)
 			{
-				$image = 'img/lumiere-on.png';
+				$image = 'img/interrupteur-on.png';
 				$nextstate = '1';
 			}
 			// Gpio -1 = erreur ?
@@ -43,25 +43,21 @@ class Lumiere extends Gpio
 			}
 				
 			$retour='
-			<div id="' . $iddiv . '">
-					
-				<img style="width:100%;" id="' . $idimg . '" src="' . $image . '"></img>
+				<div id="' . $iddiv . '">					
+					<img style="width:100%;" id="' . $idimg . '" src="' . $image . '"></img>
 						
-				<script type="text/javascript">
+					<script type="text/javascript">
 					$(document).ready(function()
-					{
-			
-						$("#' . $idimg . '").on(\'click\', function(even) {
-							
-							$("#' . $iddiv . '").load(\'lumiere.php\',{ name:"' . $name . '", pin:' . $pin . ', label:"' . $label . '", state:' . $nextstate . '});
-					
+						{
+				
+							$("#' . $idimg . '").on(\'click\', function(even) {
+								
+								$("#' . $iddiv . '").load(\'interrupteur.php\',{ name:"' . $name . '", pin:' . $pin . ', label:"' . $label . '", state:' . $nextstate . '});
+							});			
 						});
-			
-					});
-				</script>
-
-			</div>
-			';
+					</script>
+				</div>
+				';
 				
 		}
 		catch (GpioException $e)
@@ -94,18 +90,18 @@ if (isset($_POST['name']) and isset($_POST['pin']) and isset($_POST['state']) an
 		$label = $_POST['label'];
 
 		// Instancie un Gpio
-		$lumiere = new Lumiere('gpioLumiere', $pin, $label);
+		$interrupteur = new Interrupteur($name, $pin, $label);
 
-		// Modifie l'état du Gpio, avec comme délai 0 puisqu'il s'agit d'un objet de type Lumiere
-		$lumiere->setState($state, 0);
+		// Modifie l'état du Gpio, avec comme délai 0 puisqu'il s'agit d'un objet de type Interrupteur
+		$interrupteur->setState($state, 0);
 
 		// Affiche le nouvel interrupteur
-		echo $lumiere;
+		echo $interrupteur;
 
 	}
 	catch (Exception $e)
 	{
-		throw new \GpioException('Lumiere Exception => ' . $e);
+		throw new \GpioException('Interrupteur Exception => ' . $e);
 	}
 
 }
