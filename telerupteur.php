@@ -73,7 +73,7 @@ if (isset($_POST['name']) and isset($_POST['pin']) and isset($_POST['label']))
 		$telerupteur = new Telerupteur($name, $pin, $label);
 
 		// Modifie l'état du Gpio, avec comme délai 0.25 puisqu'il s'agit d'un objet de type Telerupteur
-		$telerupteur->setState(0, .25);
+		$telerupteur->setState(0, .3);
 
 		// Affiche le nouveau telerupteur
 		echo $telerupteur;
