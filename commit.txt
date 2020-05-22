@@ -1,8 +1,0 @@
-TODO
-
-- ajouter image d'attente (dans le jquery do tostring)
-
-PROCHAINS COMMITS
-
-- ajout d'une image telerupteur.png
-
